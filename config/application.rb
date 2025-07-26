@@ -40,5 +40,9 @@ module OkOfflineApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # hosts
+    config.hosts << "offline.oknotok.com"
+
   end
 end
