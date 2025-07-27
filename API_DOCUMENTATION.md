@@ -7,7 +7,7 @@ The OK-Offline API provides weather data and future community features for the B
 ## Base URL
 
 - Development: `http://localhost:3000`
-- Production: `https://api.offline.oknotok.com` (TBD)
+- Production: `https://offline.oknotok.com/api/v1` (TBD)
 
 ## Authentication
 
