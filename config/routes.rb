@@ -11,6 +11,29 @@ Rails.application.routes.draw do
       # Weather endpoints
       post "weather/current", to: "weather#current"
       get "test", to: "weather#test"
+      
+      # Search endpoints
+      resources :search, only: [] do
+        collection do
+          post :vector
+          post :hybrid
+          post :entities
+          post :suggest
+          get :analytics
+        end
+      end
+      
+      # Embedding management endpoints
+      resources :embeddings, only: [] do
+        collection do
+          post :generate
+          post :batch_import
+          get :status
+        end
+      end
+      
+      # Tile package endpoint
+      get 'tiles/package.zip', to: 'tiles#package'
     end
   end
 

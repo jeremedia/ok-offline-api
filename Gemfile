@@ -38,8 +38,16 @@ gem "rack-cors"
 # HTTP client libraries
 gem "httparty"
 
+# ZIP file creation for tile packages
+gem "rubyzip", "~> 2.3"
+
 # JWT for token authentication
 gem "jwt"
+
+# Vector search and AI integration
+gem "neighbor" # pgvector integration for Rails
+gem "ruby-openai" # OpenAI API client
+gem "tiktoken_ruby" # Token counting for OpenAI
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
