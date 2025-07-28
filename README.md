@@ -1,13 +1,29 @@
 # OK-Offline API
 
-Rails 8 API service providing weather data and future community features for the OK-Offline ecosystem.
+Rails 8 API service providing weather data, vector search, and future community features for the OK-Offline ecosystem.
+
+## 🌟 Current Features
+
+### Production Services ✅
+- **Weather Service** - Multi-source weather data with fallbacks (OpenWeatherMap + Apple WeatherKit)
+- **Vector Search** - AI-powered semantic search using OpenAI embeddings (750+ items indexed)
+- **Entity Extraction** - Automatic detection of themes, locations, and activities
+- **Search Analytics** - Usage tracking and performance metrics
+- **CORS Support** - Configured for frontend integration
+
+### Live in Production
+- Three search modes available at https://offline.oknotok.com
+- 24-hour result caching implemented
+- Graceful offline fallback to keyword search
+- URL parameter support for shareable searches
 
 ## Requirements
 
 - Ruby 3.3.0
 - Rails 8.0.1
-- PostgreSQL 14+
+- PostgreSQL 14+ with pgvector extension
 - Redis (optional, for caching)
+- OpenAI API key (for vector search)
 
 ## Environment Setup
 
@@ -15,6 +31,13 @@ Rails 8 API service providing weather data and future community features for the
 
 ```bash
 bundle install
+
+# Install pgvector extension
+# On macOS with Homebrew:
+brew install pgvector
+
+# On Ubuntu/Debian:
+sudo apt install postgresql-14-pgvector
 ```
 
 ### 2. Environment Variables
@@ -30,6 +53,9 @@ APPLE_WEATHER_KEY_ID=your_apple_weather_key_id
 APPLE_WEATHER_TEAM_ID=your_apple_team_id
 APPLE_WEATHER_SERVICE_ID=your_apple_service_id
 APPLE_WEATHER_PRIVATE_KEY_PATH=path/to/your/apple_key.p8
+
+# Vector Search (Optional but recommended)
+OPENAI_API_KEY=your_openai_api_key
 
 # Rails Configuration
 RAILS_ENV=development
@@ -48,6 +74,11 @@ RAILS_ENV=development
 3. Download the .p8 private key file
 4. Note your Team ID, Service ID, and Key ID
 
+**OpenAI API:**
+1. Sign up at https://platform.openai.com
+2. Generate an API key from your account
+3. Costs ~$0.0004 per 1K tokens for embeddings
+
 ### 3. Database Setup
 
 ```bash
@@ -55,16 +86,25 @@ RAILS_ENV=development
 rails db:create
 rails db:migrate
 rails db:seed  # Optional: loads sample data
+
+# Enable pgvector extension
+rails db -c "CREATE EXTENSION IF NOT EXISTS vector;"
 ```
 
 ### 4. Running the API Server
 
 ```bash
-# Development server (runs on port 3000)
-rails server
+# Development server (runs on port 3555 with Tailscale)
+rails server -b 0.0.0.0 -p 3555
 
-# Or specify a different port
-rails server -p 3001
+# Import vector search data (requires OPENAI_API_KEY)
+rails search:import[2024]
+
+# Check vector search stats
+rails search:stats
+
+# Generate embeddings for existing data
+rails search:generate_embeddings
 ```
 
 ## API Endpoints
@@ -136,25 +176,107 @@ POST /api/v1/weather/current
 }
 ```
 
-**Error Response (400 - Bad Request):**
+### Vector Search API (Live in Production ✅)
+
+#### Semantic Search
+
+```
+POST /api/v1/search/vector
+```
+
+**Request Body:**
 ```json
 {
-  "error": {
-    "message": "Missing required parameters: latitude and longitude",
-    "timestamp": "2024-08-26T15:30:00Z"
+  "query": "yoga and meditation camps",
+  "year": 2024,
+  "types": ["camp", "art", "event"],
+  "limit": 20,
+  "threshold": 0.7  // Optional: minimum similarity score
+}
+```
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "uid": "abc123",
+      "name": "Sunrise Yoga Camp",
+      "type": "camp",
+      "description": "Daily yoga and meditation...",
+      "score": 0.89,
+      "location_string": "7:30 & E"
+    }
+  ],
+  "meta": {
+    "total": 15,
+    "query_time": 0.125
   }
 }
 ```
 
-**Error Response (503 - Service Unavailable):**
-```json
-{
-  "error": {
-    "message": "Weather service temporarily unavailable",
-    "timestamp": "2024-08-26T15:30:00Z"
-  }
-}
+**Frontend Integration:**
+- Available at https://offline.oknotok.com in search view
+- Accessible via search mode dropdown
+- Results cached for 24 hours in browser
+
+#### Hybrid Search (Vector + Keyword)
+
 ```
+POST /api/v1/search/hybrid
+```
+
+Combines semantic understanding with keyword matching for best results.
+
+#### Entity-Based Search
+
+```
+POST /api/v1/search/entities
+```
+
+Search by extracted entities like themes, locations, or activities.
+
+#### Search Suggestions
+
+```
+POST /api/v1/search/suggest
+```
+
+Get autocomplete suggestions based on query prefix.
+
+#### Search Analytics
+
+```
+GET /api/v1/search/analytics
+```
+
+View search usage statistics and performance metrics (admin only).
+
+### Embedding Management
+
+#### Generate Embeddings
+
+```
+POST /api/v1/embeddings/generate
+```
+
+Generate embeddings for new content.
+
+#### Batch Import
+
+```
+POST /api/v1/embeddings/batch_import
+```
+
+Import and embed data from JSON files.
+
+#### Import Status
+
+```
+GET /api/v1/embeddings/status
+```
+
+Check the status of ongoing import operations.
 
 ### Legacy Endpoints (Deprecated)
 
@@ -189,6 +311,9 @@ rails test
 
 # Run specific test file
 rails test test/controllers/api/v1/weather_controller_test.rb
+
+# Run vector search tests
+rails test test/services/search/
 ```
 
 ### Test Weather Integration
@@ -209,8 +334,9 @@ This will:
 ### CORS Configuration
 
 CORS is configured in `config/initializers/cors.rb` to allow requests from:
-- `http://localhost:8000` (frontend development)
+- `http://100.104.170.10:8005` (frontend development)
 - `https://offline.oknotok.com` (production frontend)
+- Any localhost port in 8000-8999 range
 
 ### Caching
 
@@ -227,14 +353,55 @@ Rails.cache.clear
 
 ### Service Architecture
 
-The weather system uses a service-oriented architecture:
+The system uses a service-oriented architecture:
 
 1. **WeatherAggregatorService** - Coordinates multiple weather sources
 2. **OpenWeatherService** - Fetches data from OpenWeatherMap
 3. **AppleWeather** - Fetches data from Apple WeatherKit
 4. **WeatherCacheService** - Handles caching logic
+5. **Search::EmbeddingService** - OpenAI embedding generation
+6. **Search::EntityExtractionService** - Extract entities from text
+7. **Search::VectorSearchService** - Similarity search logic
+8. **Search::DataImportService** - Import data from JSON files
 
 Services failover gracefully: if Apple Weather fails, it falls back to OpenWeather.
+
+## Vector Search Details
+
+### Database Schema
+
+The vector search uses pgvector for efficient similarity search:
+
+```ruby
+# SearchableItem model
+- uid: string
+- item_type: string (camp/art/event)
+- year: integer
+- name: string
+- description: text
+- searchable_text: text
+- embedding: vector(1536)
+- metadata: json
+
+# SearchEntity model
+- entity_type: string
+- entity_value: string
+- confidence: float
+```
+
+### Search Performance
+
+- Vector similarity search: < 100ms (HNSW index)
+- Hybrid search: < 200ms
+- Batch embedding: 50 items per API call
+- Current dataset: 750+ items indexed
+
+### Cost Management
+
+- OpenAI embeddings: ~$0.0004 per 1K tokens
+- Average item: ~500 tokens
+- Full dataset embedding: < $1
+- Monitor usage with `rails search:stats`
 
 ## Deployment
 
@@ -242,6 +409,7 @@ Services failover gracefully: if Apple Weather fails, it falls back to OpenWeath
 
 Ensure these environment variables are set in production:
 - All weather API keys
+- OpenAI API key for vector search
 - `RAILS_MASTER_KEY` for credentials decryption
 - Database connection settings
 - Redis URL for caching (optional)
@@ -253,7 +421,7 @@ Ensure these environment variables are set in production:
 docker build -t ok-offline-api .
 
 # Run the container
-docker run -p 3000:3000 --env-file .env ok-offline-api
+docker run -p 3555:3555 --env-file .env ok-offline-api
 ```
 
 ## Troubleshooting
@@ -264,6 +432,13 @@ docker run -p 3000:3000 --env-file .env ok-offline-api
 2. Verify external weather services are accessible
 3. Check logs: `tail -f log/development.log`
 4. Run test script: `ruby test_weather.rb`
+
+### Vector Search Not Working
+
+1. Ensure OPENAI_API_KEY is set
+2. Check pgvector extension: `rails db -c "SELECT * FROM pg_extension WHERE extname = 'vector';"`
+3. Run data import: `rails search:import[2024]`
+4. Check embeddings: `rails console` then `SearchableItem.count`
 
 ### CORS Issues
 
@@ -276,6 +451,13 @@ docker run -p 3000:3000 --env-file .env ok-offline-api
 1. Verify PostgreSQL is running: `pg_ctl status`
 2. Check database.yml configuration
 3. Ensure database exists: `rails db:create`
+4. Verify pgvector installed: `CREATE EXTENSION vector;`
+
+## API Documentation
+
+For detailed API documentation including all endpoints, see:
+- [API_DOCUMENTATION.md](API_DOCUMENTATION.md) - Complete endpoint reference
+- [VECTOR_SEARCH_API.md](VECTOR_SEARCH_API.md) - Vector search specifics
 
 ## Contributing
 
@@ -283,6 +465,8 @@ This is part of the OK-Offline ecosystem for Burning Man participants. When cont
 1. Ensure all features work offline-first
 2. Test in harsh conditions (limited connectivity)
 3. Prioritize reliability over real-time features
+4. Follow Rails best practices
+5. Add tests for new features
 
 ## License
 
