@@ -25,11 +25,11 @@ namespace :tiles do
     
     # Calculate total tiles
     zoom_levels.each do |zoom|
-      min_tile = lat_lng_to_tile(bounds[:south], bounds[:west], zoom)
-      max_tile = lat_lng_to_tile(bounds[:north], bounds[:east], zoom)
+      sw_tile = lat_lng_to_tile(bounds[:south], bounds[:west], zoom)
+      ne_tile = lat_lng_to_tile(bounds[:north], bounds[:east], zoom)
       
-      width = (max_tile[:x] - min_tile[:x]).abs + 1
-      height = (max_tile[:y] - min_tile[:y]).abs + 1
+      width = (ne_tile[:x] - sw_tile[:x]).abs + 1
+      height = (sw_tile[:y] - ne_tile[:y]).abs + 1
       total_tiles += width * height
     end
     
@@ -37,11 +37,21 @@ namespace :tiles do
     
     # Download tiles
     zoom_levels.each do |zoom|
-      min_tile = lat_lng_to_tile(bounds[:south], bounds[:west], zoom)
-      max_tile = lat_lng_to_tile(bounds[:north], bounds[:east], zoom)
+      # Get tile coordinates for bounds
+      sw_tile = lat_lng_to_tile(bounds[:south], bounds[:west], zoom)
+      ne_tile = lat_lng_to_tile(bounds[:north], bounds[:east], zoom)
       
-      (min_tile[:x]..max_tile[:x]).each do |x|
-        (max_tile[:y]..min_tile[:y]).each do |y|
+      # In tile coordinates, Y increases from north to south
+      # So north (higher latitude) has lower Y value
+      min_x = sw_tile[:x]
+      max_x = ne_tile[:x]
+      min_y = ne_tile[:y]  # North has lower Y
+      max_y = sw_tile[:y]  # South has higher Y
+      
+      puts "Zoom #{zoom}: X range #{min_x}..#{max_x}, Y range #{min_y}..#{max_y}"
+      
+      (min_x..max_x).each do |x|
+        (min_y..max_y).each do |y|
           begin
             tile_data = download_tile(zoom, x, y)
             
@@ -72,7 +82,12 @@ namespace :tiles do
     Zip::File.open(output_path, create: true) do |zipfile|
       Dir[temp_dir.join('**', '*.png')].each do |file|
         relative_path = file.sub("#{temp_dir}/", '')
-        zipfile.add("tiles/#{relative_path}", file)
+        entry_name = "tiles/#{relative_path}"
+        
+        # Remove existing entry if it exists (handles duplicates)
+        zipfile.remove(entry_name) if zipfile.find_entry(entry_name)
+        
+        zipfile.add(entry_name, file)
       end
     end
     
