@@ -39,7 +39,7 @@ gem "rack-cors"
 gem "httparty"
 
 # ZIP file creation for tile packages
-gem "rubyzip", "~> 2.3"
+gem "rubyzip", "~> 3.0"
 
 # JWT for token authentication
 gem "jwt"
