@@ -41,5 +41,8 @@
 # Ignore IDE files
 .idea/
 
+# Ignore Claude working directory
+.claude/
+
 # Ignore temporary extraction directory
 /temp_extract/
