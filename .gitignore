@@ -34,3 +34,12 @@
 # Ignore Apple Weather private key
 /app/services/apple_key
 /app/services/*.p8
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore IDE files
+.idea/
+
+# Ignore temporary extraction directory
+/temp_extract/
