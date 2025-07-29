@@ -81,13 +81,13 @@ class AppleWeather
   end
 
   def load_key
-    key_path = ENV['APPLE_WEATHER_PRIVATE_KEY_PATH'] || "app/services/apple_key"
+    key_path = ENV.fetch('APPLE_WEATHER_PRIVATE_KEY_PATH')
     File.read(key_path)
   end
   def jwt_token
-    team_id = ENV['APPLE_WEATHER_TEAM_ID'] || '7SWYPA4YZ5'
-    service_id = ENV['APPLE_WEATHER_SERVICE_ID'] || 'com.zinod.slackbot'
-    api_key = ENV['APPLE_WEATHER_KEY_ID'] || '9XG6YW4RKV'
+    team_id = ENV.fetch('APPLE_WEATHER_TEAM_ID')
+    service_id = ENV.fetch('APPLE_WEATHER_SERVICE_ID')
+    api_key = ENV.fetch('APPLE_WEATHER_KEY_ID')
     private_key_content = load_key
     private_key = OpenSSL::PKey::EC.new(private_key_content)
     now = Time.now.to_i
@@ -110,9 +110,3 @@ class AppleWeather
   end
 
 end
-
-#     api_key = "XG6YW4RKV.com.zinod.slackbot"
-#team_id: 7SWYPA4YZ5
-# Name:WeatherBot
-# Key ID:9XG6YW4RKV
-# Services:WeatherKit

@@ -30,3 +30,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore Apple Weather private key
+/app/services/apple_key
+/app/services/*.p8
