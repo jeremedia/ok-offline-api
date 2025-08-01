@@ -64,6 +64,10 @@ def test
         # Extract the actual weather data from the aggregator response
         data = weather_data[:data] || {}
         
+        # Get today's forecast for twilight times
+        daily_forecast = data[:forecast_daily] || []
+        today_forecast = daily_forecast.first || {}
+        
         # Format according to API spec
         {
           data: {
@@ -78,7 +82,16 @@ def test
             feelsLike: data.dig(:current_weather, :feels_like),
             dustLevel: calculate_dust_level(data[:current_weather]),
             moonPhase: calculate_moon_phase,
-            forecast: format_forecast(data[:forecast_daily])
+            forecast: format_forecast(data[:forecast_daily]),
+            # Add twilight times from today's forecast
+            sunrise: today_forecast[:sunrise],
+            sunset: today_forecast[:sunset],
+            civilTwilightStart: today_forecast[:civil_twilight_start],
+            civilTwilightEnd: today_forecast[:civil_twilight_end],
+            nauticalTwilightStart: today_forecast[:nautical_twilight_start],
+            nauticalTwilightEnd: today_forecast[:nautical_twilight_end],
+            astronomicalTwilightStart: today_forecast[:astronomical_twilight_start],
+            astronomicalTwilightEnd: today_forecast[:astronomical_twilight_end]
           },
           meta: {
             source: weather_data[:source] || 'unknown',

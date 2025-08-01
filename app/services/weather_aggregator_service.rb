@@ -154,7 +154,16 @@ class WeatherAggregatorService
         condition: map_apple_condition(day['conditionCode']),
         condition_description: day['conditionCode'],
         precipitation_probability: day['precipitationChance'],
-        humidity: (day.dig('daytimeForecast', 'humidity') || 0) * 100
+        humidity: (day.dig('daytimeForecast', 'humidity') || 0) * 100,
+        # Extract twilight times from Apple Weather (using correct field names)
+        sunrise: day['sunrise'],
+        sunset: day['sunset'],
+        civil_twilight_start: day['sunriseCivil'],
+        civil_twilight_end: day['sunsetCivil'],
+        nautical_twilight_start: day['sunriseNautical'],
+        nautical_twilight_end: day['sunsetNautical'],
+        astronomical_twilight_start: day['sunriseAstronomical'],
+        astronomical_twilight_end: day['sunsetAstronomical']
       }
     end
   end
