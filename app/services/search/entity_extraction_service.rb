@@ -4,8 +4,7 @@ module Search
     
     def initialize
       @client = OpenAI::Client.new(
-        access_token: ENV.fetch('OPENAI_API_KEY'),
-        log_errors: Rails.env.development?
+        api_key: ENV['OPENAI_API_KEY']
       )
     end
     
@@ -15,19 +14,17 @@ module Search
       system_prompt = build_system_prompt(item_type)
       
       begin
-        response = @client.chat(
-          parameters: {
-            model: EXTRACTION_MODEL,
-            messages: [
-              { role: "system", content: system_prompt },
-              { role: "user", content: text }
-            ],
-            response_format: { type: "json_object" },
-            temperature: 0.3
-          }
+        response = @client.chat.completions.create(
+          model: EXTRACTION_MODEL,
+          messages: [
+            { role: "system", content: system_prompt },
+            { role: "user", content: text }
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.3
         )
         
-        result = JSON.parse(response.dig("choices", 0, "message", "content") || "{}")
+        result = JSON.parse(response.choices.first.message.content || "{}")
         parse_entities(result)
       rescue => e
         Rails.logger.error("Entity Extraction Error: #{e.message}")

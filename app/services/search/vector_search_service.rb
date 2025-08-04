@@ -13,7 +13,8 @@ module Search
       start_time = Time.current
       
       # Build base query
-      scope = SearchableItem.by_year(year).with_embedding
+      scope = SearchableItem.with_embedding
+      scope = scope.by_year(year) if year.present?
       scope = scope.where(item_type: item_types) if item_types.present?
       
       # Perform vector similarity search
@@ -23,7 +24,7 @@ module Search
       execution_time = Time.current - start_time
       
       # Log search query for analytics
-      log_search_query(query, 'vector', results, execution_time)
+      log_search_query(query, 'vector', results.to_a, execution_time)
       
       # Format results
       format_results(results, query_embedding, execution_time)
@@ -36,7 +37,8 @@ module Search
       start_time = Time.current
       
       # Build base query
-      scope = SearchableItem.by_year(year)
+      scope = SearchableItem.all
+      scope = scope.by_year(year) if year.present?
       scope = scope.where(item_type: item_types) if item_types.present?
       
       # Perform hybrid search (vector + keyword)
@@ -50,7 +52,7 @@ module Search
       execution_time = Time.current - start_time
       
       # Log search query
-      log_search_query(query, 'hybrid', results, execution_time)
+      log_search_query(query, 'hybrid', results.to_a, execution_time)
       
       # Format results
       format_results(results, query_embedding, execution_time)
@@ -80,7 +82,7 @@ module Search
       execution_time = Time.current - start_time
       
       # Log search query
-      log_search_query(entities.join(', '), 'entity', results, execution_time)
+      log_search_query(entities.join(', '), 'entity', results.to_a, execution_time)
       
       # Format results
       format_results(results, nil, execution_time)

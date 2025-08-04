@@ -4,7 +4,9 @@ class SearchableItem < ApplicationRecord
   
   # Validations
   validates :uid, presence: true, uniqueness: true
-  validates :item_type, presence: true, inclusion: { in: %w[camp art event] }
+  validates :item_type, presence: true, inclusion: { 
+    in: %w[camp art event experience_story historical_fact infrastructure practical_guide timeline_event essay speech philosophical_text manifesto interview letter note theme_essay policy_essay] 
+  }
   validates :year, presence: true
   validates :name, presence: true
   
