@@ -1,0 +1,1124 @@
+.chat-container
+  .chat-header
+    %h1 
+      %span.logo 🌊
+      Seven Pools Chat
+    %p.subtitle Powered by the Model Context Protocol and 718K+ enliterated entities
+    
+    .connection-status
+      %span.status-dot.connected
+      Connected to Seven Pools MCP Server
+    
+  .chat-layout
+    #messages.messages-container
+      .message.assistant-message
+        .message-header
+          %span.role Assistant
+          %span.model gpt-4.1 + MCP
+        .message-content
+          Welcome to Seven Pools Chat! I have access to the entire enliterated Burning Man dataset through the Model Context Protocol. 
+          %br
+          %br
+          I can search camps, analyze text for Seven Pools entities, fetch detailed information, and discover cross-pool connections. What would you like to explore?
+        .mcp-tools-used
+          %span.tool-badge.available{"data-tool" => "search"} search
+          %span.tool-badge.available{"data-tool" => "fetch"} fetch
+          %span.tool-badge.available{"data-tool" => "analyze_pools"} analyze_pools
+          %span.tool-badge.available{"data-tool" => "pool_bridge"} pool_bridge
+          %span.tool-badge.available{"data-tool" => "location_neighbors"} location_neighbors
+          %span.tool-badge.available{"data-tool" => "set_persona"} set_persona
+          %span.tool-badge.available{"data-tool" => "clear_persona"} clear_persona
+  
+    .sidebar
+      .pools-indicator
+        %h3 Seven Pools
+        .pool-item{data: {pool: "idea"}}
+          %span.pool-icon 💭
+          %span.pool-name Idea
+          %span.pool-status
+        .pool-item{data: {pool: "manifest"}}
+          %span.pool-icon 🏗️
+          %span.pool-name Manifest
+          %span.pool-status
+        .pool-item{data: {pool: "experience"}}
+          %span.pool-icon ✨
+          %span.pool-name Experience
+          %span.pool-status
+        .pool-item{data: {pool: "relational"}}
+          %span.pool-icon 🤝
+          %span.pool-name Relational
+          %span.pool-status
+        .pool-item{data: {pool: "evolutionary"}}
+          %span.pool-icon 📈
+          %span.pool-name Evolutionary
+          %span.pool-status
+        .pool-item{data: {pool: "practical"}}
+          %span.pool-icon 🔧
+          %span.pool-name Practical
+          %span.pool-status
+        .pool-item{data: {pool: "emanation"}}
+          %span.pool-icon 🌟
+          %span.pool-name Emanation
+          %span.pool-status
+      
+      .enliteracy-metrics
+        %h3 Enliteracy Metrics
+        .metric
+          %span.label Last Query Score
+          %span.value#enliteracy-score -
+        .metric
+          %span.label Entities Found
+          %span.value#entities-count -
+        .metric
+          %span.label Tools Used
+          %span.value#tools-count 0
+  
+  = form_with url: api_v1_chat_responses_path, method: :post, id: 'chat-form', class: 'chat-form' do |f|
+    .input-group
+      = text_field_tag :message, '', 
+        placeholder: "Ask about camps, analyze text for Seven Pools, or explore connections...", 
+        class: "chat-input",
+        autocomplete: "off",
+        autofocus: true
+      = submit_tag "Send", class: "send-button", data: { disable_with: "Sending..." }
+    %input#response-id{type: "hidden", name: "previous_response_id"}
+
+:css
+  .chat-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .chat-header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .chat-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 3rem;
+    animation: wave 2s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .connection-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  .status-dot.connected {
+    background: #4caf50;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+  }
+
+  .chat-layout {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+  }
+
+  .sidebar {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pools-indicator {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .pools-indicator h3 {
+    margin: 0 0 16px 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .pool-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    opacity: 0.5;
+    transition: all 0.3s;
+    color: #999;
+  }
+
+  .pool-item.active {
+    opacity: 1;
+    color: #333;
+  }
+  
+  .pool-item.activated {
+    opacity: 0.85;
+    color: #555;
+  }
+
+  .pool-icon {
+    font-size: 1.2rem;
+    transition: all 0.3s;
+  }
+  
+  .pool-item.active .pool-icon {
+    transform: scale(1.1);
+  }
+
+  .pool-name {
+    flex: 1;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .pool-item.active .pool-name {
+    color: #333;
+    font-weight: 500;
+  }
+
+  .pool-status {
+    width: 40px;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .pool-status .pool-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #00bfa5);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .pool-item.active .pool-status::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #007bff, #00bfa5);
+    animation: shimmer 1.5s ease-in-out;
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+
+  .enliteracy-metrics {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .enliteracy-metrics h3 {
+    margin: 0 0 16px 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .metric:last-child {
+    border-bottom: none;
+  }
+
+  .metric .label {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .metric .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .message {
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+  }
+
+  .role {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .model {
+    color: #666;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+  }
+
+  .user-message {
+    margin-left: 60px;
+  }
+
+  .user-message .message-content {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 20px 20px 4px 20px;
+    max-width: 80%;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  }
+
+  .assistant-message .message-content {
+    background: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    line-height: 1.6;
+  }
+  
+  /* Markdown styles */
+  .message-content h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+    color: #1a1a1a;
+  }
+  
+  .message-content h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+    color: #2a2a2a;
+  }
+  
+  .message-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.8rem 0 0.4rem 0;
+    color: #3a3a3a;
+  }
+  
+  .message-content code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    color: #d73a49;
+  }
+  
+  .message-content pre {
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  
+  .message-content pre code {
+    background: none;
+    padding: 0;
+    color: #24292e;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  
+  .message-content p {
+    margin: 0 0 1rem 0;
+  }
+  
+  .message-content p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .message-content ul, .message-content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+  }
+  
+  .message-content li {
+    margin: 0.25rem 0;
+    line-height: 1.6;
+  }
+  
+  .message-content li p {
+    margin: 0;
+  }
+  
+  .message-content a {
+    color: #007bff;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  
+  .message-content a:hover {
+    border-bottom-color: #007bff;
+  }
+  
+  .message-content strong {
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .message-content em {
+    font-style: italic;
+    color: #4a4a4a;
+  }
+
+  .assistant-message.streaming .message-content::after {
+    content: '▊';
+    color: #007bff;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
+  .thinking-indicator {
+    display: inline-block;
+    color: #666;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    animation: thinking 1.5s infinite;
+  }
+  
+  @keyframes thinking {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+  }
+
+  .mcp-tools-used {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tool-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: #f0f0f0;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    color: #666;
+    transition: all 0.3s;
+  }
+
+  .tool-badge.available {
+    opacity: 0.5;
+  }
+
+  .tool-badge.used {
+    background: #e3f2fd;
+    color: #1976d2;
+    opacity: 1;
+    animation: toolPulse 0.5s ease;
+  }
+
+  .tool-badge.active {
+    background: #007bff;
+    color: white;
+    animation: toolActive 1s ease infinite;
+  }
+  
+  .tool-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 2px;
+    opacity: 0.9;
+  }
+
+  @keyframes toolPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes toolActive {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .entity-results {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+  }
+
+  .entity-results h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  .entity-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .entity-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .entity-tag:hover {
+    border-color: #007bff;
+    color: #007bff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .chat-form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+    margin-top: 20px;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 12px;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+
+  .chat-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  .send-button {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  }
+
+  .send-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  }
+
+  .send-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .error {
+    color: #dc3545;
+    font-style: italic;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .chat-layout {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      overflow-x: auto;
+    }
+    
+    .pools-indicator, .enliteracy-metrics {
+      min-width: 250px;
+    }
+  }
+
+:javascript
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('chat-form');
+    const messagesContainer = document.getElementById('messages');
+    const messageInput = document.querySelector('.chat-input');
+    const responseIdInput = document.getElementById('response-id');
+    let currentResponseId = null;
+    
+    // Track tool usage counts per message
+    const toolUsageCounts = new Map();
+    
+    // Track pool activations
+    const poolActivationCounts = new Map();
+    
+    // Function to get the MCP chat agent ID
+    function getMcpChatAgentId() {
+      // In production, this could be fetched from the server or passed as a data attribute
+      // For now, use the MCP-enabled agent
+      return #{Agent.find_by(name: 'mcp_chat_assistant')&.id || 'null'};
+    }
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const message = messageInput.value.trim();
+      if (!message) return;
+      
+      // Add user message
+      appendUserMessage(message);
+      
+      // Clear input
+      messageInput.value = '';
+      
+      // Add assistant message container
+      const assistantId = 'assistant-' + Date.now();
+      const assistantMessage = createAssistantMessage(assistantId);
+      messagesContainer.appendChild(assistantMessage);
+      scrollToBottom();
+      
+      // Stream response from Responses API endpoint
+      try {
+        const requestBody = {
+          chat: { 
+            message,
+            previous_response_id: currentResponseId,
+            agent_id: getMcpChatAgentId() // Use the MCP-enabled agent
+          }
+        };
+        
+        const response = await fetch('/api/v1/chat/responses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let metadata = null;
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          
+          for (const line of lines) {
+            if (line.trim() === '') continue;
+            
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                document.getElementById(assistantId).classList.remove('streaming');
+                if (metadata) {
+                  updateMetrics(metadata);
+                  updateToolsUsed(assistantId, metadata.mcp_tools_used);
+                }
+                continue;
+              }
+              
+              try {
+                const parsed = JSON.parse(data);
+                
+                if (parsed.type === 'metadata') {
+                  metadata = parsed.data;
+                  currentResponseId = metadata.response_id;
+                  responseIdInput.value = currentResponseId;
+                } else if (parsed.type === 'tool_active') {
+                  // Handle MCP tool activation
+                  console.log('Tool active:', parsed.tool, 'for message:', assistantId);
+                  updateToolStatus(assistantId, parsed.tool, 'active');
+                  activatePoolsForTool(parsed.tool);
+                } else if (parsed.type === 'tool_completed') {
+                  // Handle MCP tool completion
+                  console.log('Tool completed:', parsed.tool, 'for message:', assistantId);
+                  updateToolStatus(assistantId, parsed.tool, 'used');
+                } else if (parsed.type === 'pools_mentioned') {
+                  // Handle pool mentions from the response text
+                  activatePoolsFromText(parsed.pools);
+                } else if (typeof parsed === 'string') {
+                  updateAssistantMessage(assistantId, parsed);
+                } else if (parsed.error) {
+                  updateAssistantMessage(assistantId, parsed.error, true);
+                }
+              } catch (e) {
+                console.error('Error parsing SSE data:', e);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        updateAssistantMessage(assistantId, 'Sorry, I encountered an error. Please try again.', true);
+      }
+    });
+    
+    function appendUserMessage(content) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message user-message';
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'message-header';
+      headerDiv.innerHTML = '<span class="role">You</span>';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = content;
+      
+      messageDiv.appendChild(headerDiv);
+      messageDiv.appendChild(contentDiv);
+      messagesContainer.appendChild(messageDiv);
+      scrollToBottom();
+      
+      // Analyze user message for pools
+      analyzeUserMessageForPools(content);
+    }
+    
+    function createAssistantMessage(id) {
+      const messageDiv = document.createElement('div');
+      messageDiv.id = id;
+      messageDiv.className = 'message assistant-message streaming';
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'message-header';
+      headerDiv.innerHTML = '<span class="role">Assistant</span><span class="model">gpt-4.1 + MCP</span>';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      // Add thinking indicator initially
+      contentDiv.innerHTML = '<span class="thinking-indicator">...</span>';
+      
+      const toolsDiv = document.createElement('div');
+      toolsDiv.className = 'mcp-tools-used';
+      toolsDiv.innerHTML = `
+        <span class="tool-badge available" data-tool="search">search</span>
+        <span class="tool-badge available" data-tool="fetch">fetch</span>
+        <span class="tool-badge available" data-tool="analyze_pools">analyze_pools</span>
+        <span class="tool-badge available" data-tool="pool_bridge">pool_bridge</span>
+        <span class="tool-badge available" data-tool="location_neighbors">location_neighbors</span>
+        <span class="tool-badge available" data-tool="set_persona">set_persona</span>
+        <span class="tool-badge available" data-tool="clear_persona">clear_persona</span>
+      `;
+      
+      messageDiv.appendChild(headerDiv);
+      messageDiv.appendChild(contentDiv);
+      messageDiv.appendChild(toolsDiv);
+      return messageDiv;
+    }
+    
+    let messageBuffers = {};
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function updateAssistantMessage(id, content, isError = false) {
+      const messageEl = document.getElementById(id);
+      if (!messageEl) return;
+      
+      const contentEl = messageEl.querySelector('.message-content');
+      if (!contentEl) return;
+      
+      // Remove thinking indicator on first content
+      const thinkingIndicator = contentEl.querySelector('.thinking-indicator');
+      if (thinkingIndicator) {
+        thinkingIndicator.remove();
+      }
+      
+      if (!messageBuffers[id]) {
+        messageBuffers[id] = '';
+      }
+      
+      messageBuffers[id] += content;
+      
+      if (isError) {
+        contentEl.innerHTML = `<span class="error">${messageBuffers[id]}</span>`;
+      } else {
+        // Enhanced markdown parsing with more features
+        let html = messageBuffers[id];
+        
+        // Code blocks with syntax highlighting hint
+        html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+          const langClass = lang ? ` language-${lang}` : '';
+          return `<pre><code class="code-block${langClass}">${escapeHtml(code.trim())}</code></pre>`;
+        });
+        
+        // Inline code
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        
+        // Headers
+        html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+        
+        // Bold and italic
+        html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>'); // Bold + italic
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>'); // Italic
+        
+        // Links
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        
+        // Process lists more carefully - need to handle line-by-line
+        const lines = html.split('\n');
+        let inUl = false;
+        let inOl = false;
+        let processedLines = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          
+          // Check for unordered list item
+          if (line.match(/^- /)) {
+            if (!inUl) {
+              processedLines.push('<ul>');
+              inUl = true;
+            }
+            processedLines.push('<li>' + line.substring(2) + '</li>');
+          }
+          // Check for ordered list item
+          else if (line.match(/^\d+\. /)) {
+            if (!inOl) {
+              processedLines.push('<ol>');
+              inOl = true;
+            }
+            processedLines.push('<li>' + line.replace(/^\d+\. /, '') + '</li>');
+          }
+          // Not a list item
+          else {
+            if (inUl) {
+              processedLines.push('</ul>');
+              inUl = false;
+            }
+            if (inOl) {
+              processedLines.push('</ol>');
+              inOl = false;
+            }
+            processedLines.push(line);
+          }
+        }
+        
+        // Close any open lists
+        if (inUl) processedLines.push('</ul>');
+        if (inOl) processedLines.push('</ol>');
+        
+        html = processedLines.join('\n');
+        
+        // Clean up line breaks around block elements
+        html = html.replace(/<\/(h[1-3]|ul|ol|pre)>\n/g, '</$1>');
+        html = html.replace(/\n<(h[1-3]|ul|ol|pre)/g, '<$1');
+        
+        // Convert remaining line breaks
+        html = html.replace(/\n\n/g, '</p><p>');
+        html = html.replace(/\n/g, '<br>');
+        
+        // Wrap in paragraphs if not already wrapped
+        if (!html.startsWith('<')) {
+          html = '<p>' + html + '</p>';
+        }
+        
+        // Clean up empty paragraphs and excessive breaks
+        html = html.replace(/<p><\/p>/g, '');
+        html = html.replace(/<p><br>/g, '<p>');
+        html = html.replace(/<br><\/p>/g, '</p>');
+        html = html.replace(/(<br>){2,}/g, '<br>');
+        
+        contentEl.innerHTML = html;
+      }
+      
+      scrollToBottom();
+    }
+    
+    function updateToolStatus(messageId, toolName, status) {
+      const messageEl = document.getElementById(messageId);
+      if (!messageEl) return;
+      
+      // Initialize tool usage counts for this message if not exists
+      if (!toolUsageCounts.has(messageId)) {
+        toolUsageCounts.set(messageId, new Map());
+      }
+      const messageToolCounts = toolUsageCounts.get(messageId);
+      
+      // Find the specific tool badge
+      const toolBadge = messageEl.querySelector(`[data-tool="${toolName}"]`);
+      
+      if (toolBadge) {
+        if (status === 'active') {
+          toolBadge.classList.remove('available', 'used');
+          toolBadge.classList.add('active');
+        } else if (status === 'used') {
+          toolBadge.classList.remove('available', 'active');
+          toolBadge.classList.add('used');
+          
+          // Increment usage count
+          const currentCount = messageToolCounts.get(toolName) || 0;
+          messageToolCounts.set(toolName, currentCount + 1);
+          
+          // Update badge text with count if > 1
+          const count = messageToolCounts.get(toolName);
+          if (count > 1) {
+            // Update the badge text to show count
+            const originalText = toolName.replace(/_/g, ' ');
+            toolBadge.innerHTML = `${originalText} <span class="tool-count">×${count}</span>`;
+          }
+        }
+      } else if (toolName === 'mcp_call') {
+        // Fallback: if we get generic mcp_call, don't update all tools
+        console.warn('Received generic mcp_call instead of specific tool name');
+        // Don't update all badges - this is likely an error
+        return;
+      }
+      
+      // Update tools count - count unique tools used
+      const uniqueToolsUsed = messageToolCounts.size;
+      const totalCalls = Array.from(messageToolCounts.values()).reduce((a, b) => a + b, 0);
+      document.getElementById('tools-count').textContent = totalCalls > uniqueToolsUsed ? `${uniqueToolsUsed} (${totalCalls} calls)` : uniqueToolsUsed;
+    }
+    
+    function updateToolsUsed(messageId, toolsUsed) {
+      if (!toolsUsed || !Array.isArray(toolsUsed)) return;
+      
+      const messageEl = document.getElementById(messageId);
+      if (!messageEl) return;
+      
+      toolsUsed.forEach(tool => {
+        const toolBadge = messageEl.querySelector(`[data-tool="${tool.tool}"]`);
+        if (toolBadge) {
+          toolBadge.classList.remove('available');
+          toolBadge.classList.add('used');
+          
+          // Animate pool activation based on tool
+          activatePoolsForTool(tool.tool);
+        }
+      });
+      
+      // Update tools count
+      document.getElementById('tools-count').textContent = toolsUsed.length;
+    }
+    
+    function activatePoolsForTool(toolName) {
+      const poolMappings = {
+        'search': ['idea', 'manifest', 'experience'],
+        'fetch': ['manifest', 'relational', 'practical'],
+        'analyze_pools': ['idea', 'manifest', 'experience', 'relational', 'evolutionary', 'practical', 'emanation'],
+        'pool_bridge': ['relational', 'evolutionary'],
+        'location_neighbors': ['manifest', 'relational', 'evolutionary'],
+        'set_persona': ['emanation', 'relational'],
+        'clear_persona': ['emanation']
+      };
+      
+      const pools = poolMappings[toolName] || [];
+      pools.forEach(pool => {
+        const poolEl = document.querySelector(`[data-pool="${pool}"]`);
+        if (poolEl) {
+          poolEl.classList.add('active', 'activated');
+          
+          // Track pool activation count
+          const currentCount = poolActivationCounts.get(pool) || 0;
+          poolActivationCounts.set(pool, currentCount + 1);
+          
+          // Update pool status bar
+          updatePoolStatusBar(pool);
+          
+          // Remove active class after animation, but keep activated
+          setTimeout(() => poolEl.classList.remove('active'), 3000);
+        }
+      });
+    }
+    
+    function activatePoolsFromText(pools) {
+      // Activate pools based on text content mentions
+      pools.forEach(pool => {
+        const poolEl = document.querySelector(`[data-pool="${pool}"]`);
+        if (poolEl) {
+          poolEl.classList.add('active', 'activated');
+          
+          // Track pool activation count
+          const currentCount = poolActivationCounts.get(pool) || 0;
+          poolActivationCounts.set(pool, currentCount + 1);
+          
+          // Update pool status bar width based on activations
+          updatePoolStatusBar(pool);
+          
+          // Shorter activation for text mentions, but keep activated
+          setTimeout(() => poolEl.classList.remove('active'), 2000);
+        }
+      });
+    }
+    
+    function updatePoolStatusBar(poolName) {
+      const poolEl = document.querySelector(`[data-pool="${poolName}"]`);
+      if (!poolEl) return;
+      
+      const statusBar = poolEl.querySelector('.pool-status');
+      if (!statusBar) return;
+      
+      // Get activation count for this pool
+      const count = poolActivationCounts.get(poolName) || 0;
+      
+      // Create or update the fill bar
+      let fillBar = statusBar.querySelector('.pool-fill');
+      if (!fillBar) {
+        fillBar = document.createElement('div');
+        fillBar.className = 'pool-fill';
+        fillBar.style.cssText = 'position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, #007bff, #00bfa5); transition: width 0.3s;';
+        statusBar.appendChild(fillBar);
+      }
+      
+      // Set width based on count (cap at 100%)
+      const width = Math.min(count * 10, 100); // Each activation = 10% width
+      fillBar.style.width = `${width}%`;
+      
+      // Update pool name with count if > 1
+      const poolNameEl = poolEl.querySelector('.pool-name');
+      if (poolNameEl && count > 1) {
+        const baseName = poolNameEl.textContent.split(' ')[0]; // Remove any existing count
+        poolNameEl.textContent = `${baseName} (${count})`;
+      }
+    }
+    
+    function analyzeUserMessageForPools(message) {
+      // Simple keyword-based pool detection
+      const poolKeywords = {
+        idea: ['philosophy', 'principle', 'concept', 'theory', 'belief'],
+        manifest: ['camp', 'art', 'structure', 'build', 'create'],
+        experience: ['feel', 'emotion', 'transform', 'moment', 'story'],
+        relational: ['community', 'connect', 'relationship', 'together', 'friend'],
+        evolutionary: ['history', 'change', 'evolution', 'year', 'time'],
+        practical: ['how', 'guide', 'tip', 'skill', 'technique'],
+        emanation: ['spiritual', 'transcend', 'wisdom', 'collective', 'emergence']
+      };
+      
+      const lowerMessage = message.toLowerCase();
+      Object.entries(poolKeywords).forEach(([pool, keywords]) => {
+        if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+          const poolEl = document.querySelector(`[data-pool="${pool}"]`);
+          if (poolEl) {
+            poolEl.classList.add('active');
+            setTimeout(() => poolEl.classList.remove('active'), 2000);
+          }
+        }
+      });
+    }
+    
+    function updateMetrics(metadata) {
+      // Update enliteracy score (mock for now)
+      const score = Math.round(Math.random() * 100);
+      document.getElementById('enliteracy-score').textContent = score + '%';
+      
+      // Update entities count (mock for now)
+      const entities = Math.round(Math.random() * 50) + 10;
+      document.getElementById('entities-count').textContent = entities;
+    }
+    
+    function scrollToBottom() {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  });
