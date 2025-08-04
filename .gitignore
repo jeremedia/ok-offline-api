@@ -46,3 +46,6 @@
 
 # Ignore temporary extraction directory
 /temp_extract/
+
+# Ignore the enliterator gem development directory (separate project)
+/enliterator/
