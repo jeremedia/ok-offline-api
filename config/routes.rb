@@ -34,12 +34,26 @@ Rails.application.routes.draw do
       
       # Tile package endpoint
       get 'tiles/package.zip', to: 'tiles#package'
+      
+      # MCP Server endpoints  
+      match 'mcp/sse', to: 'mcp/mcp#sse', via: [:get, :post]
+      post 'mcp/tools', to: 'mcp/mcp#tools'
+      
+      # Chat endpoints
+      post 'chat', to: 'chat#create'
+      post 'chat/responses', to: 'responses_chat#create' # New Responses API with MCP
     end
   end
 
   # Legacy weather endpoints (keep for backward compatibility)
   get "weather", to: "weather#show"
   delete "weather/cache", to: "weather#clear_cache"
+  
+  # Chat interfaces
+  get 'chat', to: 'chat#show'
+  get 'chat/turbo', to: 'chat#turbo'
+  get 'chat/simple', to: 'chat#simple'
+  get 'chat/mcp', to: 'chat#mcp'
 
   # Defines the root path route ("/")
   # root "posts#index"
