@@ -1,8 +1,6 @@
 # OpenAI configuration
-OpenAI.configure do |config|
-  config.access_token = ENV.fetch('OPENAI_API_KEY', nil)
-  config.request_timeout = 30 # seconds
-end
+# The newer OpenAI gem doesn't use configure block - configuration is done per-client
+# This initializer just checks if the API key is set
 
 # Verify configuration in development
 if Rails.env.development? && ENV['OPENAI_API_KEY'].blank?

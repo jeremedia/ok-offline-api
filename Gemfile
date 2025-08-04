@@ -46,8 +46,19 @@ gem "jwt"
 
 # Vector search and AI integration
 gem "neighbor" # pgvector integration for Rails
-gem "ruby-openai" # OpenAI API client
+# gem "ruby-openai" # OpenAI API client
 gem "tiktoken_ruby" # Token counting for OpenAI
+
+# Image generation from HTML/CSS
+gem "himg"
+
+# View rendering support
+gem "haml-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
+
+# Neo4j for knowledge graph
+gem "neo4j-ruby-driver"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -58,4 +69,11 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  
+  # Load environment variables from .env file
+  gem "dotenv-rails"
 end
+
+gem "openai"
+
+# gem "mission_control-jobs", "~> 1.1"
