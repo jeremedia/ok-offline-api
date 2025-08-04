@@ -1,0 +1,50 @@
+# Option 1: Process immediately in webhook (simple but blocks response)
+def handle_batch_completed(event)
+  batch_id = event['data']['id']
+  Rails.logger.info "🎉 Batch completed: #{batch_id}"
+  
+  # Update BatchJob record
+  batch_job = BatchJob.find_by(batch_id: batch_id)
+  if batch_job
+    # Sync with API to get final status
+    service = Search::BatchPoolEntityExtractionService.new
+    service.check_batch_status(batch_id)
+    
+    Rails.logger.info "Batch #{batch_id} updated: #{batch_job.reload.status}"
+    
+    # Process results immediately
+    Rails.logger.info "Processing batch results..."
+    success = service.process_batch_results(batch_id)
+    
+    if success
+      batch_job.metadata['processed'] = true
+      batch_job.metadata['processed_at'] = Time.current
+      batch_job.save!
+      Rails.logger.info "✅ Batch results processed automatically"
+    end
+  else
+    Rails.logger.warn "BatchJob record not found for #{batch_id}"
+  end
+end
+
+# Option 2: Use background job (better for production)
+def handle_batch_completed(event)
+  batch_id = event['data']['id']
+  Rails.logger.info "🎉 Batch completed: #{batch_id}"
+  
+  # Update BatchJob record
+  batch_job = BatchJob.find_by(batch_id: batch_id)
+  if batch_job
+    # Sync with API to get final status
+    service = Search::BatchPoolEntityExtractionService.new
+    service.check_batch_status(batch_id)
+    
+    Rails.logger.info "Batch #{batch_id} updated: #{batch_job.reload.status}"
+    
+    # Queue processing job
+    BatchCompletionJob.perform_later(batch_id)
+    Rails.logger.info "📋 Queued batch processing job"
+  else
+    Rails.logger.warn "BatchJob record not found for #{batch_id}"
+  end
+end

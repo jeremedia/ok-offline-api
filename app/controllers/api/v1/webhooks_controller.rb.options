@@ -1,0 +1,51 @@
+# Webhook Processing Options
+
+## Current Setup (with Solid Queue)
+The webhook now queues a background job using Solid Queue:
+- ProcessBatchResultsJob.perform_later(batch_id)
+- Requires running: bin/jobs
+
+## Alternative for Development (Inline Processing)
+If you prefer immediate processing without running a worker:
+
+```ruby
+# In webhooks_controller.rb, replace:
+ProcessBatchResultsJob.perform_later(batch_id)
+
+# With:
+if Rails.env.development?
+  # Process immediately in development
+  ProcessBatchResultsJob.new.perform(batch_id)
+else
+  # Queue for production
+  ProcessBatchResultsJob.perform_later(batch_id)
+end
+```
+
+## Starting Solid Queue Worker
+
+### Option 1: Separate Terminal
+```bash
+bin/jobs
+```
+
+### Option 2: With Puma (auto-starts with server)
+Edit config/puma.rb and uncomment/add:
+```ruby
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"] || Rails.env.development?
+```
+
+### Option 3: Process jobs manually
+```bash
+# Process all pending jobs
+rails runner 'SolidQueue::Job.where(finished_at: nil).each { |job| job.execute }'
+```
+
+## Monitoring Jobs
+```bash
+# Check pending jobs
+rails runner 'puts "Pending jobs: #{SolidQueue::Job.where(finished_at: nil).count}"'
+
+# Clear old jobs
+rails solid_queue:clear
+```

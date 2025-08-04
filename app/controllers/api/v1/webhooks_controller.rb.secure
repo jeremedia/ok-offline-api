@@ -1,0 +1,28 @@
+# Example of more secure webhook handling for production
+
+def verify_webhook_signature
+  # Option 1: IP Allowlist (OpenAI publishes their webhook IPs)
+  allowed_ips = ENV['OPENAI_WEBHOOK_IPS']&.split(',') || []
+  unless allowed_ips.include?(request.remote_ip)
+    Rails.logger.warn "Webhook from unauthorized IP: #{request.remote_ip}"
+    raise "Unauthorized webhook source"
+  end
+  
+  # Option 2: Shared secret in header or payload
+  webhook_secret = ENV['WEBHOOK_SHARED_SECRET']
+  provided_secret = request.headers['X-Webhook-Secret']
+  
+  if webhook_secret && provided_secret != webhook_secret
+    raise "Invalid webhook secret"
+  end
+  
+  # Option 3: Validate batch ID exists in our database
+  batch_id = params.dig('data', 'id')
+  unless BatchJob.exists?(batch_id: batch_id)
+    Rails.logger.warn "Webhook for unknown batch: #{batch_id}"
+    raise "Unknown batch ID"
+  end
+  
+  # Parse and return the event
+  params.except(:controller, :action, :webhook).to_unsafe_h
+end
