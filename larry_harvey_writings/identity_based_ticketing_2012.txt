@@ -1,0 +1,324 @@
+---
+title: "Why Not Implement Identity-Based Ticketing?"
+year: 2012
+type: policy_essay
+author: Larry Harvey
+source_url: "https://journal.burningman.org/2012/12/philosophical-center/tenprinciples/why-not-implement-identity-based-ticketing/"
+fetched_at: "2025-08-03 15:29:33"
+word_count: 8611
+priority: 3
+---
+
+Why Not Implement Identity-Based Ticketing?”
+Skeive says: December 14, 2012 at 10:29 pm
+With all due respect, how can you possibly know what percentage of tickets were obtained by scalping? Are you just going off the numbers of apparent sales on stubhub or something? You couldn’t possibly know all the tickets sold through craigslist, by roadside salesman, or such. Is it based on surveys? By definition scalping is outside the normal channel of ticket sales (of which stubhub and ebay are a small piece) and anyone buying from scalpers is obtaining the tickets outside of the social covenant so how likely would they be to self report this on a survey? This 1% number seems preposterously optimistic given the huge cluster that the ticket purchase process turned into.
+I know you guys are trying your best to fairly handle the ticket situation but it still appears you are viewing this situation with overly rose colored glasses.
+Report comment
+nikolaus heger says: December 14, 2012 at 10:48 pm
+Rejoice, scalpers!
+2012 was a complete and utter mess thanks to the ill-conveived lottery – the lottery left many people disappointed and confused – but it also confused the hell out of scalpers, and in the end many tickets were left over and ended up getting sold under value – if you could get rid of them at all.
+As for the vast majority of buyers are honest folks. Obviously all Burning Man participants are, with very few exceptions. The whole point is, though, that scalpers aren’t BM participants. They have never been. They don’t care whether it’s an experiment in community building or a Justin Bieber concert – all they see is supply, demand, and profit.
+I really don’t know what the big deal is with IDs. BMORG can keep these secure; it can names on tickets at the last minute. And it could use STEP to make tickets transferable in a safe, scalper-free environment. Even at the last minute.
+Report comment
+smshing says: December 14, 2012 at 10:53 pm
+I was someone in the id on tickets camp but this makes a lot of sense. Thank you.
+Report comment
+Alex says: December 14, 2012 at 10:58 pm
+“And it could use STEP to make tickets transferable in a safe, scalper-free environment. Even at the last minute.”
+Any such system will either limited your ability to give the ticket to a specific person, or will not prevent scalper transactions
+Report comment
+papatua says: December 14, 2012 at 10:58 pm
+While I can respect the conclusions drawn, I can also respectably disagree.
+The ticketing problem our culture faces is not an internal one, where most naturally play by the rules and behave in concert with our gifting ideals. No, the threat to our culture is an overt EXTERNAL one based on greed by those who see an opportunity to subvert our ideals for pure profit. These people DO NOT share our values and without implementing a secure ticketing platform, the opportunity to profit from the event through ticket secondary sales will remain ripe and that endangers us collectively.
+In a perfect world we wouldn’t need ID based ticketing, but we don’t live in a perfect world.
+Report comment
+Light Bearer says: December 14, 2012 at 11:12 pm
+Totally agree. I got my tickets lower than the ticket price from an obvious scalper on the way (Friday but even that Tuesday they were under face value if you knew where to look … and also way over in a lot of places of course). Also, tying this to a name makes it more difficult to transfer last moment (which I had to do in 2008). I lived out my dream of 12 years plus (part of my college thesis was on BM (or rather the other way around) and I had to use a second hand source at the time). I didn’t even know if it was worth going that late. It was. I’ll be back next year with a full camp and at least one person I love who said she’d never go. Now she can’t wait to go.
+Finally, the other reason I agree, is that tying tickets to the identity goes against the principle of gift economy that is at the heart of BM. I plan to gift her a ticket this year as a late xmas present.
+Thank you!
+Report comment
+Dylan says: December 14, 2012 at 11:16 pm
+The scalping question is a red herring. The problem is an issue of perceived scarcity. People bought more tickets than they needed last year out of fear, uncertainty, exuberance, greed, whatever. And then by summer, when things calmed down, there were plenty of tickets available. The challenge this creates for the burning man social fabric, is far more problematic than the inability to gift a ticket. If one is committed to building something, making art, creating a camp, playing music, or any of the other amazing gifts that people give, one needs time, and to know as early in the year as possible that, yes, I have 20 people who have tickets who can take this project on. If one doesn’t know early on, one can’t make the commitment to build something in the six months required to pull it together. This isn’t a problem for the large camps, who can invariably scrape together tickets using connections or grants from BM Org, as happened last year. It’s more a problem for the “middle class” of camps, folks who take the time and effort to make something cool that might not be sponsored, but that adds immensely to the fabric that is Burning Man. The event works because of the balance of big great projects, small individual contributions, and, importantly, the stuff in the middle that gives the playa it’s richness and depth. Protecting gifting of tickets, at the expense of ensuring that those who will go, and will contribute, are able to purchase and commit early in the year, is short sighted and will in time turn the event into something where only the big name sponsored projects can be taken on, turn everyone else into a last minute voyeur, and/or force people into the arms of the commercial camps that buy tickets and build “camps for hire”. Having people commit to a personal purchase, would go a long way to addressing this problem.
+Report comment
+NevadaGeo says: December 15, 2012 at 1:41 am
+Seems that all changes of ID of ticket holders could easily be handled at Will Call, with some type of approved transfer receipt of ownership of the ticket from scalper to would be Burner to giftee. How many thousands of transfered tickets are there normally?
+Nothing will be perfect for every situation.
+Report comment
+john says: December 15, 2012 at 1:42 am
+issue multi-names tickets.
+10 names per ticket that must be provided at time of purchase.
+Report comment
+john says: December 15, 2012 at 1:45 am
+issue 25,000 tickets with names and 25,000 tickets without names
+Report comment
+Uzi says: December 15, 2012 at 2:14 am
+Regardless of scalpers, the problem is that people buy more than they need, while others are left without – and that cteates an aftermarket mess. You can allow one person buy for his friends, and yet, issue them with names – non-transferrable. This way people will think twice before buying knowing they would not be able to resell them, only to return them back to BM, subject to some cancellation fee. This way there will be NO aftermarket activity whatsoever.
+Report comment
+Oddty711 says: December 15, 2012 at 2:18 am
+Thank you for keeping names off tickets. I agree this was the right decision for all the reasons you listed above.
+With STEP, A) please find a way to allow the transfer of tickets through the duration of the event. Closing STEP to transfers in early August also prevents the gifting of tickets from people who can’t go at the last minute to people who need them. B) Allow the transfer of tickets to specific people or release them to the general community. The easier it is for us to transfer tickets the better.
+Report comment
+Jolly Roger says: December 15, 2012 at 2:37 am
+I think that the hypocrisy of saying that you must keep it because of the roots in “the gift giving ethic of our culture” coming from first camp voices is obscene.
+Raising the price of tickets each and every year, because you can? Pretending that the artificial demand generated by the broken ticketing system last year was legitimate? (How many tickets were sold and unused last year? I’m really curious, that might give a legitimately informative demand number)
+Names on tickets are being asked for each year, and the rebukes of that policy are becoming weaker each year, not through quality of argument, but through credibility of those making it.
+Report comment
+Thomas Iddings says: December 15, 2012 at 2:47 am
+Ideally, of course, we want BMORG to always price the tickets “just right” such that there are only a few unsold tickets left-over every year, and they never “sell out”. But, what are the odds BMORG will always guess it right? Someday, BMORG will mis-guess it, and we will need the Entrepreneurial Resellers (including “Scalpers”) to provide a market that minimizes the disruptions caused by a Sell-Out. BUT, we also want a structure where the “Scalpers” cannot FORCE a Sold-Out condition. Designing such a structure takes some careful thought. These new rules appear to be steps in the right direction, but seem incomplete to me. Room for improvement.
+Report comment
+Steve Sims says: December 15, 2012 at 3:09 am
+Last year was only the 6th time we burned. Almost didn’t go. Didn’t get a lotto ticket – sure, we tried! On the Tuesday before the burn, we were offered a ticket by a friend who had a family emergency. We bought it at his purchase price. On the Monday of BM, we bought a 2nd ticket from a guy here in Reno with work obligations – also at fair price.
+‘No names on tickets’ allowed this to happen. We weren’t scalped. We had a great time. We’ll be back again.
+If it works… don’t fix it.
+Report comment
+Blaze says: December 15, 2012 at 6:12 am
+Well, actually BMORG spent a lot of time and effort, not just on EBay and Stubhub, tracking the scalper scene. The 1% number doesn’t surprise me much., considering the human tendency to hysteria and exaggeration.
+I feel there is a strong sentiment to keep names off tickets – people prefer anonymity, and often insist on it.
+The bandit-class has always existed. As we put more effort we put into making it difficult for them, we get diminishing returns. Our efforts should be toward engaging them, drawing them into our community, as we do with everybody – wherein they feel vested in what we’re doing and embrace these ideals. The rest, well, our gifting to the dregs. The effort should not make it harder for the rest of us.
+Report comment
+Skeive says: December 15, 2012 at 8:46 am
+Does anyone really truly believe that only 600 tickets were purchased by people with the express intent to resell them? Cause that really should be the definition of scalping. People who buy tickets to resell rather than to attend. A scalper that ends up having to sell at face value or below is just an unlucky scalper.
+Given the enormous oversubscription (in the 30% range from what I have been able to gather) I really can’t see how anyone can believe that only 600 tickets were sold to scalpers.
+Report comment
+FIGJAM says: December 15, 2012 at 9:00 am
+Will there be tiers, tears, TIERS??????????!!!!!!!!!!
+Report comment
+Shazam Orange says: December 15, 2012 at 9:35 am
+Well Skeive, then I’ve been an scalper in your book the past few years, because I’d buy two tickets with the “express intent” to resell the second later to another burner at face. Before the lottery, this gave someone else in my local community the opportunity to get a lower tier ticket later in the year, and it was a small gift that I could do each year.
+The lottery last year actually left me with an extra ticket, partially because the full-price ticket I had was no more attractive than any other. And on my way home, I was talking with a local in Reno and had the opportunity to gift it to them. I didn’t need to ask this person’s name or anything, I could just give them a ticket. With “name on ticket” or other ID verification schemes, I would have to get their “legal name” and send it to BMorg, who could end up with thousands of last-minute changes to deal with.
+So we’re asking BMorg to sign up for a new, potentially massive landslide of work as the event nears, additional work by Gate to verify tickets to IDs, and in the end to do what? To eliminate these assumed “scalpers” from the ticket market?
+If no Burner ever buys a ticket over face value, those “scalpers” are then doing no more than what i ever did – offering to buy tickets early, so that BMorg has funding for the new year, and then to sell them later to others at the same price, so that attendees who didn’t have funds in January can get to them.
+And so… hopefully there is no lottery this year, and we take everything back to first come, first served. If every participant only buys tickets at face value, and only gifts or sells at face value, then we, the community, will be the best protection against profiteering possible, and without putting a single drop of new work on BMorg.
+Wow… instead of being scared about “them”, I’d rather trust our community. (Drink!) :)
+Report comment
+David Littlejohn says: December 15, 2012 at 10:29 am
+It seems to me that $625 per ticket (in the December round of 3,000 this year) must be getting pretty close to what scalpers were asking at their peak last year.
+Report comment
+AnarchyJim says: December 15, 2012 at 11:07 am
+Shazam that’s a red herring. That’s not what Skeive was referring to. You really believe only 600 tickets were purchased with the intent of selling them at a higher price on stubhub, craigslist or whatever?
+The transfer of tickets can easily be done with the existing Step system. You could just let the original purchase reassign the name. OR Require that the person purchasing the ticket has the name of the original purchaser and ticket number. They submit that, an is sent to the original purchaser to confirm they want to transfer the ticket, and the transfer happens. This makes it difficult for scalpers to function as they have to provide the name on the ticket… thus making it easy for them to be reported.
+Gate is already checking every ticket that comes in and scanning it. I don’t see how presenting an ID is any more work.
+You could also allow tickets to be used as long as the purchaser is in the vehicle. Say John Doe buys four tickets. As long as he’s present it doesn’t matter who the other people are.
+All of this is to help prevent a clusterfuck and sellout in the beginning, which dramatically hurts camps/installations that have to prepare. As mentioned elsewhere, if you have to plan 6 months in advance and you need to know that you’re going to have 20 tickets in February… waiting until July for the ticket situation to sort itself out is not an option.
+Perception matters a LOT. If people think the event will sell out and that scalpers will get a significant number of tickets (regardless of how much they actually get), everyone and their mother will try getting a ticket. This is, I think, much of what happened last year. Everyone that was _thinking_ about going, tried to get tickets for themselves and their friends, figuring if they didn’t go they could easily sell them for a profit in July.
+The camps and art installations are what make BM what it is. Not the weekenders who show up on Thursday. The big projects need time and they need to know they can get tickets. An ID system would help prevent people buying more tickets than they need, thus making more tickets available at the outset.
+Yes, some last minute gifting might be affected. Hell, you could even by a ‘nameless’ ticket by paying an extra $150. Like buying an unlocked iPhone. This could be used to finance a scholarship ticket.
+So many ways to do this right. It’s BS and INSULTING to look at last year and try to say only 1% of tickets were bought with the intent of resale and that everything will be hunky dory this year just because there’s no lottery. You guys didn’t take any advice last year, and you’re not going to take any advice this year.
+Report comment
+Brian says: December 15, 2012 at 11:12 am
+We got tier I tickets last year and then used STEP because we couldn’t go in the last minute. STEP was great!
+What I propose is an ID-base ticketing system (Name on tickets is a must) and then a STEP program where you can either:
+1.) Give the tickets away anonymously, like we did, or
+2.) Give the tickets to a designated person (via their as positive identifier and name for the ticket.)
+But as it gets later and later to the event, the risk rises that people won’t get their tickets in time. So what should be done, is, if you do a last-minute ticket transfer (via STEP designated, then you go to a special line at the playa to sort it out. The reason why I suggest a ‘special’ line is to avoid congestion for everyone else who has their tickets in order.
+I can’t stand the scalper at Burning Man. I do understand their motive, but if the goal is to eliminate this problem, there are definitely ways to it where gifting and last-minute kickdowns can be accounted for.
+BTW, the Step program worked perfectly for us. Took about 30 seconds to sign-up and about 2 minutes for our tickets to be given to someone else.
+Report comment
+Peter says: December 15, 2012 at 12:09 pm
+The reason you cannot have ID’s attached to tickets, is because some very involved participants are under the radar or off the grid, and do not have “ID’s.” Pretty simple.
+Report comment
+Jeremy says: December 15, 2012 at 1:10 pm
+I’m just curious what the system will be to “weed out scalpers”. By nature, scalpers are con-men, they WILL find a way to take advantage of virtually any system you put in place, (except for tickets that are exclusively transferable through BMORG). I’m curious to see how this plays out. At this point I’d be AMAZED if we didn’t see 100’s if not 1000’s of tickets on stubhub and eBay the day after tickets sell out.
+But I hope I’m wrong! I put love, trust and faith in BMorg.
+Ya havent let me down yet… Last year seemed like a disaster, but when the dust settled, anyone who wanted a ticket, was able to get one…
+Report comment
+SOLUTION!!!!!!!!!!! says: December 15, 2012 at 5:03 pm
+***Names on tickets do NOT prohibit gifting if controlled transfers are allowed.
+SOLUTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Centrally Controlled Ticketing System
+Each ticket should be transferable by entering the Burning Man ticketing website where you enter the persons name that you’re transferring to.
+1. Tickets should only be able to be transferred by naming the transferee by address.
+2. The original ticket holder is then issued a transfer code (Which is also ed to the new purchaser.)
+3. When the transferree logs into the Burning Man Ticketing System and types in the transfer code, the original ticket holder gets refunded, and newly authozied tranferee can then purchase the ticket through the burning man ticketing system, (plus a small transfer fee).
+This way, tickets are only licences to grant access to the event, and the serial number on the ticket as it is scanned, is the only thing that will grant access to the event.
+Report comment
+SOLUTION!!!!!!!!!!! Part 2 says: December 15, 2012 at 5:16 pm
+…. and of course a gift ticket could just be renamed in the database…. by the giftee, after they received their authorization code.
+Report comment
+SOLUTION!!!!!!!!!!! Part 3 says: December 15, 2012 at 5:22 pm
+Instead of BMorg wasting time chasing after Scalpers and forcing us all the “PRE-REGISTER” why not just adopt the progressive solution I suggested that they can profit off of!?
+Report comment
+SOLUTION!!!!!!!!!!! Part 3 says: December 15, 2012 at 5:25 pm
+“In the wake of 2012 ticket sales, a number of people have called for Burning Man to implement an identity-based ticketing system (non-transferable, name-on-ticket). ”
+A NUMBER OF PEOPLE???? How about THOUSANDS of people?
+Report comment
+lifeisshort says: December 15, 2012 at 6:02 pm
+It maybe to late to throw this out there, but here it goes….I know this has been said but it is worth repeating ” Burning Man is very different from any other Festival” and because of this difference Ticketing can not be first come first serve.
+Burning Man is Cumulative! It may not have started out that way, but it is now and therein lies the magic!
+So with that said “Inverse Protestant Reformation” be damned! The mature camps have evolved their infrastructure. No newbie is going to come in and produce what our veterans do each year. I do not belong to a Large camp nor a heme Camp; However, I feel it is the elaborate, mind blowing creations that comes from these Large groups you find nowhere else except Burning Man.. it has no Equal. Here is the Big Pill, some members of our community need to have an advantage…sorry but its true. To keep the magic we need our Veterans, and they need to have enough members of their camps to make it happen.
+there it is…my two cents
+Report comment
+Dean says: December 15, 2012 at 7:01 pm
+Your main argument against ing names on tickets is that it will stop people from gifting tickets?
+REALLY?
+How many people do you really think gift tickets to people who’s name they do not know? Maybe 100? 500? However many it is, I’m sure that number pales in comparison to the number of scalped tickets sold way above face value.
+The thought that people are buying tickets and handing them out on the streets to strangers is a nice one, but it is a complete fantasy.
+I would wager 99.99% of all tickets bought are by people purchasing them for themselves or for close friends/family WHO’S NAMES THEY WILL ALREADY KNOW WHEN BUYING THE TICKETS.
+Those few people who do want to give away tickets to strangers can just use STEP.
+Report comment
+Silly Valley EE says: December 15, 2012 at 8:10 pm
+This is really a whatever, who cares, but the ePlaya moderator, who was in regular contact with the ticking folks, said that the big ticket scalpers didn’t seem to be doing significant business on BM. He the thread “Re: What happened to the 57K tickets sold in 2012?” on Thu Sep 13, 2012 7:33 am:
+“I dunno 303, I did a weekly analysis of a number of sites selling tickets, from the week of the drawing up until the week before the event. The pro scalpers never really ‘unleashed the hounds’ as it were. Based on what we saw happening online, it appears as if as many as 10% of event tickets were sold above face value (compared with upwards of 50% on other hot ticket events). There were a few small-timers, people who’d been buying up tickets from other burners, but not a single of the big players who prey upon hot ticket concerts, festivals, and sporting events seemed to be doing any significant business on our event.”
+Report comment
+Burners.Me says: December 15, 2012 at 10:20 pm
+The release of 3000 tickets for $650 are fully scalpable. This is 3% of the tickets, are they deliberately tripling the amount of scalping? Of all the explanations here, Peter’s makes the most sense. Burners wishing to stay anonymous and not present IDs, perhaps because they are involved in some sort of agricultural enterprise, can pay $650. http://burners.me/2012/12/15/merry-christmas-tickets-are-650-and-you-can-scalp-them/
+Report comment
+Cookyn says: December 15, 2012 at 11:15 pm
+First of all, thank you for eliminating the lottery! While I and those in my camp were all very lucky, I saw too many people make plans to not go to the event even though tickets became available in the end. Also, I felt and saw a tangible difference in the camps/projects that make BRC what it is, and not a good difference either. Also, I understand (though I don’t agree with) why you don’t want to implement a name-based ticket system.
+That being said, you have at your fingertips a record of every person that has ever purchased a ticket via credit card to this event. While there may be a small percent who had previously only purchased tickets at walk-in venues with cash, I’d wager that is a small percentage, very small. As many people have mentioned before IT IS THE VETERANS WHO MAKE BRC WHAT IT IS, AND KEEP IT CLEAN AND SAFE FOR EVERYONE TO ENJOY. I cannot, for the life of me, understand why you don’t use the tools at your fingertips to keep those that have “paid their dues and proven their worth” in the ever shrinking loop. I understand that the selling out of the event in 2011 really surprised you all, and really freaked us all out, and I understand that an attempt was made at a solution (albeit a failing one), but there is no good reason why people who have been before don’t get to the front of the line. And before any of you start thinking that if this were to happen then new-comers would be left out, rethink that. In my experience the amount of burners who have the time and money to embark on such an exhausting event such as Burning Man year after year is in the minority, and therefore there would be PLENTY of room for new-comers to purchase tickets, let alone the “gifting” that takes place.
+Which raises another point: I would wager that the higher the ticket price goes the amount of gifting drastically decreases, especially to strangers.
+Report comment
+Roxanne says: December 16, 2012 at 5:38 am
+I LoVe STEP!!! It is a great tool. I believe that everyone who wanted to go badly enough, went. YAY for ticket news!!
+Report comment
+susanwoopwoop says: December 16, 2012 at 6:41 am
+“we will continue to invest our faith in that community.”
+no one ever went broke doing that. blind faith is the most profitable, i see plenty of riches ahead for the Borg. rake it in, baby!!
+Report comment
+# 7 says: December 16, 2012 at 1:56 pm
+Please do not forget that the later tickets go on sale and are obtainable, “and I’m not talking about the ridiculously priced holiday sale” the later some fellow burners such as myself, will be unsure of putting our time and money into our projects. I’ve been attending BM since 1996 and have done 8 different art cars since 1998. Last year was the first year I had to wait until I was sure I had a ticket before pouring my money into the latest art car. Don’t get me wrong. I am not and have never complained of the thousands of dollars I invest each year into projects that are loved and enjoyed by many. The absolute joy and happiness that they create is what keeps me going each year. It would be nice to be able to purchase a ticket as early as possible so as to have the maximum time to plan and build and have the comfort of knowing that I will be able to bring my latest project to the Playa for all to enjoy again.
+And I still don’t get the reason BM does not go ticketless. The gifting reason just does not make sense as you can still purchase a ticket in someone else’s name. I actually had an extra $390 ticket last year because of a friends late decision to not attend, and sold my own $320.00 ticket because of the glut of late tickets for sale. For whatever reason of Greed, uncertainty, scalpers, etc…..
+Report comment
+L Rich says: December 17, 2012 at 7:32 pm
+Good lord … Of course there was little scalping in 2012. There was a massive ticket glut. For those of us who bought in the secondary market in 2011 we got scalped (I paid $850 for 2011). For those of us who bought early and high in 2012 and then found we couldn’t attend the event, there was no market and the tickets were effectively worthless (I pair $850 for 2 tic in 2011, and sold them for $99 apiece). Identity based tickets might allow for some kind of refund or exchange if the buyer couldn’t attend, particularly if the market is totally manipulated by the managers of the event such that the tickets have no inherent value.
+Report comment
+sageburner says: December 17, 2012 at 11:27 pm
+All of this ticket talk, and scalper talk shouldn’t even be happening. It’s simply creating a scalper demand, by bringing up ticket scarcity and scalpers. How about we pretend last years DISASTER never happened, Burning man gets a server/site that can handle tickets being sold with a very large amount of e-traffic, and tickets are sold like they always have been. One main sale, first come first serve. IF (not when) tickets may sell out, then we deal with scalpers and all that crap then.
+Report comment
+tubluar says: December 18, 2012 at 3:28 am
+You people are such haters. If you don’t like Burning Man so much then just go kill yourselves. The rest of us are going to party like it’s the end of the world. 2012 was so super awesome!!! I finally got laid last year!!!
+All you tired old hipsters are not with-it anymore. Live with your stupid tattoos. GTFOff the playa, morans!
+Shits going down in 2013. I made an artcar that is going to get me so many boys I’ll be spitting cum for months.
+Report comment
+Inspector12 says: December 18, 2012 at 12:31 pm
+What if we keep STEP, but have the face value of tickets fall over time? The theme camps and art installations would be guaranteed to get the tickets they need and scalpers would have no profit to make as the tickets value will fall over time. So they wouldn’t even bother to buy tickets.
+Report comment
+Inspector12 says: December 18, 2012 at 12:35 pm
+Addendum: It would also keep folks from hoarding of speculation too aggressively as to their ticket needs. If would force the market to settle down *EARLY* in the year as opposed to later in the year. Folks who bought too many tickets would be incented to release their tickets early before the prices drop.
+Report comment
+john says: December 18, 2012 at 1:20 pm
+1% scalpers maybe, but % who bestow tickets on their friends, lovers, campmates or family members ? 1% ?
+Report comment
+harinama says: December 18, 2012 at 1:40 pm
+Simple, no names on tickets, just go back to the free for all in january we used to have. Snooze you lose works for me.
+Report comment
+joffruit says: December 20, 2012 at 6:20 pm
+so were free but why schould we have as burners a Credit card to pay?i know sounds newbee, but iam cashman and dont like virtuelmoneymoves ..
+so its possible by paying tix (out of us-sale) by Creditcard by a frind of trust????
+hope it is not a problem to pay the tix on another name…
+maybe someone knows
+nobody can burn out without care fire in da soul
+Report comment
+Saguache says: December 23, 2012 at 3:00 pm
+BMORG seems hell bent on pushing people into ticket chaos. This year pre-order tickets are astronomically priced (70% YOY from last year) which will push that many more people into the FCFS ticket kerfuffle that has happened so many times before. Scalpers love the FCFS ticket kerfuffle as well as the “organized” camps. This means that unless you’re interested in taking out a second mortgage on your home you probably aren’t going to make it home this year. Gentrification is where the burn is headed and identity-based ticketing is one of the very few tools BMORG has for solving this heinous and progressive problem. Enjoy “camping” in a giant, well catered and pampered RV park on the playa.
+Report comment
+MadMaxine says: December 27, 2012 at 11:23 am
+All I can say to all of the hypercritical commenters is “walk a mile in the shoes of someone running a festival like this”, trying to balance so many issues of intentional/conscious action, while operating in the real world of constraints and unintended/unforseen consequences.
+And hey, I know exactly how these people can do JUST THAT: Volunteer to help produce a regional event.
+THEN come tell everyone how it should be done.
+Report comment
+Glenn Campbell says: December 31, 2012 at 5:22 am
+it’s a project in community!
+this is part of the project…
+why so much chatter?
+everyone that is going to the playa is going to the playa…
+it all works out…
+please use your energy in helpful ways…
+can’t wait to see you on the PLAAAYYYAAA!!!
+Report comment
+Paul Dominic says: January 2, 2013 at 10:44 pm
+How about at time of sale you must add the names of the peeps you are gving tics to, so I buy 4 tics and give BMORG all names on form? Just my two cents, I know you guys are thinking of eveything :)
+Report comment
+John says: January 4, 2013 at 5:08 pm
+I don’t have the attention span to read all the posts.
+However,
+My tickets were gifted me and a co-worker a week before the show.
+We attended from start to finished and our spirts have been lifted ever since.
+Thank you all!! :)
+Report comment
+Chicken John says: January 4, 2013 at 10:52 pm
+Larry, how many times have we been through this over the years? Again and again you put profit over people. You have no choice, you MUST make BM a private members only club with individual tickets bound to someone’s name. You have to. Not you the person you are today, you the person who you can be. The leader that has been lurking under the surface of the petty businessman who has been charading as a visionary leader. You have to learn. You have to rise to the occasion. You have to say no to rape, and this is the tool to use to do it. If this thing is a membership thing, you increase culpability. You increase all the good things about community building. And you stop tourits. I know you don’t care about anyone but yourself, but you can stop that. You can be better. You can change. You have to. Because you won’t allow anyone else to so much as put a finger on this event. And all the good people have left. And the only way this is going to contribute anything meaningful to the world is if you have a change of heart and actually start to like people.
+I know you can do it.
+kisses, chickenjohn
+Report comment
+froggie says: January 5, 2013 at 3:13 am
+so what if scalpers profiteer? I honestly don’t understand what’s so awful about knowing that someone out there might be making some profit from exploiting the difference between supply & demand. let the scalpers take the risk of loss and let them provide the service. if it’s really only about 1% scalped tickets last year, let’s stop devoting so much energy to it. bravo on choosing to serve serve the 99%, and let’s all let the scalpers be. you know that someone is depending on there being a scalped ticket available at the last minute. I’ve been that person (the buyer of a scalped ticket) before and by the way, I paid LESS than face value for it! the person who ends up with the scalped ticket may be a long-time burner with a last-minute situation and may indeed be exactly the one you were supposed to meet.
+let’s not fight or stress about this. oh wait, fighting and stressing is fun, right? hmmm.
+Report comment
+anonymouse says: January 5, 2013 at 7:34 am
+> (except for tickets that are exclusively transferable through BMORG)
+I hate to bust your bubble, but a named-STEP can be gamed. You just require a secondary payment outside of named-STEP program prior to authorizing an individual transaction.
+I always bought two tickets in the past, and gifted the spare ticket thru my community – to people whose full legal names I did not necessarily know. But I did know them by their handles, or they were connected enough to be on our regional list. Surprise, there are a number of burners whose full legal names I don’t know, and whom I’ve known for over a decade.
+This lead to a tighter regional community, as people knew they needed to come to events, and get known to people in the community if they wanted first dibs on spare tickets.
+> ‘BMorg knows everyone who has attended’
+No they don’t. I was never able to go to a walk-in ticket location, and I’ve never owned a credit card. I’ve always found someone who has a credit card who has been willing to either A) buy tickets, or B) let me use their credit card number. I thought about getting a one-use only credit card for the clusterf*ck of 2012 – but realized that I needed two tickets (no gifting the spare last year, as I needed to make sure that I also had a rideshare partner), and that total price was over the limit of a one-use credit card.
+I’m also opposed to putting my name on a list. Lists can be subpoenaed, and in bad times, lists can be taken by force. Union stewards and the like have been liquidated in many countries because they allowed their names to be put on lists in the past, when they thought their countries were safe. If you don’t think that burners are a minority that might be discriminated against, that’s fine you f*cking hippy. But I don’t wish to risk my life on such a gamble.
+I’d like to address low-income tickets. The non-transferable-ness of low-income tickets is an issue. Right now a poor person has to *GAMBLE* half of the ticket price on their ability to afford to be able to go, their health, and their responsibilities will all be capable of making an event approximately 200 days in the future.
+That’s fine if you’re a single, young, hippy-nomad.
+If you have a job (hello working poor America: 1/5th of whom have an income of Theme-camps
+I did like that theme-camps got a chance to get tickets. Unfortunately they were priced at highest tier. That led to some issues when people realized that they could get lower priced tickets later. Some of those people bailed on their responsibilities to the camp ‘well, I paid a higher price – I should get to party instead of work’.
+We do need some veterans, ie: we need enough veterans to make things work. One of the camps that I’m a lead— that I was a lead for in 2012, will not have me as a lead this year because of ticket prices. Frankly, I did all the work last year. I’m quite interested to see if there is going to be anyone who is able to step up and do the work for the 10+ year old theme camp. The other leads have burnt out, or have not been coming the last several years, and we’ve lost more to death/injuries/medical conditions.
+So we’re going to come to a time when new people are going to have to pick it up. Those people are going to have to be able to count on being able to continue to come to BM in the future, or the personal investment of learning and working to build stuff is going to be at a disadvantage to the trade-offs of just coming to party one (or two) times – and then going to the next festival to get drugs/get laid. I’m talking about the ‘I’m on vacation, so why should I work hard’ mindset.
+Old-timers will continue to hold on, but the attrition should be greater than it has been in the past, and with less every-year attendees, the involvement level is going to go down. Those people are going to lose the critical mass that they had in being able to make crews, so I’m guessing we’ll have fewer camps. And those people who do continue coming are going to have to start figuring on jumping camps more often (in order to get to min crew size).
+Report comment
+anonymouse says: January 5, 2013 at 7:45 am
+Sorry for the re-post, and the prior posting be deleted? I didn’t know the less-than-sign would eat a portion of my message.
+] (except for tickets that are exclusively transferable through BMORG)
+I hate to bust your bubble, but a named-STEP can be gamed. You just require a secondary payment outside of named-STEP program prior to authorizing an individual transaction.
+I always bought two tickets in the past, and gifted the spare ticket thru my community – to people whose full legal names I did not necessarily know. But I did know them by their handles, or they were connected enough to be on our regional list. Surprise, there are a number of burners whose full legal names I don’t know, and whom I’ve known for over a decade.
+This lead to a tighter regional community, as people knew they needed to come to events, and get known to people in the community if they wanted first dibs on spare tickets.
+] ‘BMorg knows everyone who has attended’
+No they don’t. I was never able to go to a walk-in ticket location, and I’ve never owned a credit card. I’ve always found someone who has a credit card who has been willing to either A) buy tickets, or B) let me use their credit card number. I thought about getting a one-use only credit card for the clusterf*ck of 2012 – but realized that I needed two tickets (no gifting the spare last year, as I needed to make sure that I also had a rideshare partner), and that total price was over the limit of a one-use credit card.
+I’m also opposed to putting my name on a list. Lists can be subpoenaed, and in bad times, lists can be taken by force. Union stewards and the like have been liquidated in many countries because they allowed their names to be put on lists in the past, when they thought their countries were safe. If you don’t think that burners are a minority that might be discriminated against, that’s fine you f*cking hippy. But I don’t wish to risk my life on such a gamble.
+I’d like to address low-income tickets. The non-transferable-ness of low-income tickets is an issue. Right now a poor person has to *GAMBLE* half of the ticket price on their ability to afford to be able to go, their health, and their responsibilities will all be capable of making an event approximately 200 days in the future.
+That’s fine if you’re a single, young, hippy-nomad.
+If you have a job (hello working poor America: 1/5th of whom have an income of less-than 19K) you’re not ready to ditch (no vacations); have a family: parents, kids, relatives (esp. if any are young, old, or in ill-health); you’re older or potentially could have health issues (young healthy people just have to cross their fingers that they don’t have any accidents/injuries). Also, you better not plan on going with a spouse or lover, since you only get the chance to score one ticket.
+Awesome. We need more hot young single hippy chix, especially those
+that need rides to BM (ass, grass or cash). /sarcasm /truth?
+] Theme-camps / veterans
+I did like that theme-camps got a chance to get tickets. Unfortunately they were priced at highest tier. That led to some issues when people realized that they could get lower priced tickets later. Some of those people bailed on their responsibilities to the camp ‘well, I paid a higher price – I should get to party instead of work’.
+We do need some veterans, ie: we need enough veterans to make things work. One of the camps that I’m a lead— that I was a lead for in 2012, will not have me as a lead this year because of ticket prices. Frankly, I did all the work last year. I’m quite interested to see if there is going to be anyone who is able to step up and do the work for the 10+ year old theme camp. The other leads have burnt out, or have not been coming the last several years, and we’ve lost more to death/injuries/medical conditions.
+So we’re going to come to a time when new people are going to have to pick it up. Those people are going to have to be able to count on being able to continue to come to BM in the future, or the personal investment of learning and working to build stuff is going to be at a disadvantage to the trade-offs of just coming to party one (or two) times – and then going to the next festival to get drugs/get laid. I’m talking about the ‘I’m on vacation, so why should I work hard’ mindset.
+Old-timers will continue to hold on, but the attrition should be greater than it has been in the past, and with less every-year attendees, the involvement level is going to go down. Those people are going to lose the critical mass that they had in being able to make crews, so I’m guessing we’ll have fewer camps. And those people who do continue coming are going to have to start figuring on jumping camps more often (in order to get to min crew size).
+That said, I’m on the boat with groups knowing who is able to come early enough to raise funds, to do work, and get projects together.
+I’ll be in the market for one of those $50-$99 late availability tickets. Obviously, I will be unable to commit to any work. So I guess I’ve finally moved into the party-class :) I’ll come and help out – but no leadership, and no building for me.
+Report comment
+jerzy cohen says: January 5, 2013 at 2:44 pm
+perhaps there could be 13,323 tickets with names and 26,877 without? you could conveniently use the same ratio in the low-income.
+and maybe those low-income tickets could be graded–not everyone’s need is exactly $190. some people could be paid to come (suppose they have an unusual number of arms and/or legs?) and others given discounts. some should pay more (THE 1%) and others could be paid not to come (you know who i’m talkin’ ’bout).
+Report comment
+jerzy cohen says: January 5, 2013 at 2:48 pm
+also, perhaps you should decide the names for the tickets in advance. if a ticket can only be sold to, may i humbly suggest, jerzy cohen, what scalper will take a risk on it? so take the most common 13,232 names in the world and sell tickets with these names. (#1 being of course muhammad chang.)
+Report comment
+Piano Paul says: January 9, 2013 at 10:24 am
+Your reon scalping seems convenient to support your own theory. 1% is obviously low and probably incorrect. Stub Hub and craigslist had lots of high price tix with some sellers hawking huge lots. There were also certainly greedy and/or paranoid burners who wanted to be sure they got their share and hopefully had extras for their friends who logged on with multiple computers and accounts. Some of those were sold for much more than face value.
+NO TRANSFERABLE TICKETS – CHECK TICKET NOW ALSO ID – NO PROBLEM
+Is the same think tank that’s given us the yearly cluster-fuck that is your ticket sales the same ‘decider’ once again rationalizing against a roar of disagreement and bullheadedly going ahead with selling transferable tickets? You already check tickets at the gate. ID is no more work.
+Report comment
+Shade says: January 12, 2013 at 6:25 pm
+All of these demands for names on tickets with no discussion of simple ways for a scalper to subvert the process. Sooo Republican. I can think of several and I’m just smart, not criminally inclined.
+One hinges on the large number of foreigners (aliens) that visit BM. Who knows what a Moldovian drivers license looks like. Let’s get a grip.
+The best move was a single price for all of the main tickets. Pissed me off when I paid more just through the luck of the draw. The second is an unannounced number of last minute tickets. 1000+… that + is a big deal because it could be 5000 under the BM permit.
+Scalpers might try, but they were generally burnt last year, and will be again this year. I predict this year will NOT be an immediate sell out. Too many tickets changed hands below cost last year. I met someone who was given a ticket because the person couldn’t find a buyer… very telling. People who made a profit were the lucky ones who had tier 1 tickets and sold at tier 3 prices. Not possible this year.
+So my plan is to just be there… it will happen for me this year just like last year, as it did for everyone I know who could go… even with the angst.
+Report comment
+www.articleworld.in says: September 5, 2014 at 10:30 pm
+Excellent article. Keep posting such kind of information on your blog.
+Im really impressed by it.
+Hello there, You’ve performed a fantastic job. I will certainly digg it
+and in my opinion suggest to my friends. I am sure they’ll
+be benefited from this site.
+Report comment
+Blackmartalpha.bligoo.es says: September 28, 2014 at 10:41 am
+Esto, por supuesto no quita que pueda tener algunos yerros y cierres inesperados al tratarse de una
+aplicación digamos desarrollada por la comunidad, mas poco
+a poco van mejorando y han conseguido la aplicación de market no oficial más completa, fluida y cómoda de
+utilizar, con un aspecto completamente profesional en su última
+actualización de 2014. Si bien hay muchas de las aplicaciones que
+puedes hallar en Google Play, asimismo hay títulos que no puedes conseguir en la tienda oficial,
+por lo que nunca está de más echar una ojeada para ver que app juego interesante se puede hallar.
+Report comment
+Claudio says: October 6, 2014 at 12:58 pm
+En Portal 2 podemos acceder a un muelle oculto , donde podemos ver el
+salvavidas del Borealis..
+Report comment
