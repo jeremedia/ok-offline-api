@@ -1,0 +1,43 @@
+Journal and Policy Essays
+https://journal.burningman.org/2013/11/philosophical-center/tenprinciples/introduction-the-philosophical-center/ | philosophical_center_introduction_2013.txt | Introduction: The Philosophical Center | 2013 | philosophical_text | 1
+https://journal.burningman.org/2013/11/philosophical-center/tenprinciples/how-the-west-was-won-anarchy-vs-civic-responsibility/ | how_west_was_won_2013.txt | How the West Was Won: Anarchy vs. Civic Responsibility | 2013 | essay | 1
+https://journal.burningman.org/2013/11/philosophical-center/tenprinciples/commerce-community-distilling-philosophy-from-a-cup-of-coffee/ | commerce_community_2013.txt | Commerce & Community: Distilling philosophy from a cup of coffee | 2013 | philosophical_text | 1
+https://journal.burningman.org/2014/07/philosophical-center/tenprinciples/consensus-collaboration-hierarchy-authority-and-power/ | consensus_collaboration_2014.txt | Consensus, Collaboration, Hierarchy, Authority and Power | 2014 | philosophical_text | 2
+https://journal.burningman.org/2014/12/philosophical-center/tenprinciples/equality-inequity-iniquity-concierge-culture/ | equality_inequity_2014.txt | Equality, Inequity, Iniquity: Concierge Culture | 2014 | essay | 2
+https://journal.burningman.org/2016/03/philosophical-center/tenprinciples/following-the-money-the-florentine-renaissance-and-black-rock-city/ | following_money_renaissance_2016.txt | Following the Money: The Florentine Renaissance and Black Rock City | 2016 | essay | 2
+https://journal.burningman.org/2017/01/philosophical-center/spirituality/radical-ritual-spirit-and-soul/ | radical_ritual_spirit_2017.txt | Radical Ritual: Spirit and Soul | 2017 | philosophical_text | 2
+https://journal.burningman.org/2017/07/black-rock-city/participate-in-brc/participate-in-radical-ritual/ | participate_radical_ritual_2017.txt | Participate in Radical Ritual | 2017 | essay | 3
+https://journal.burningman.org/2019/06/philosophical-center/tenprinciples/a-guide-to-gifting-givers-and-gratitude-a-treatise-from-the-philosophical-center/ | guide_to_gifting_2019.txt | A Guide to Gifting, Givers and Gratitude | 2019 | philosophical_text | 1
+https://journal.burningman.org/2012/12/philosophical-center/tenprinciples/why-not-implement-identity-based-ticketing/ | identity_based_ticketing_2012.txt | Why Not Implement Identity-Based Ticketing? | 2012 | policy_essay | 3
+https://www.trippingly.net/burning-man-musings/larry-harvey-the-struggle-for-the-desert-the-1999-permit-fight | struggle_for_desert_1999.txt | The Struggle for the Desert | 1999 | policy_essay | 2
+https://burningman.org/about/10-principles/ | ten_principles_2004.txt | The Ten Principles of Burning Man | 2004 | philosophical_text | 1
+https://kozinets.net/burning-man-founder-larry-harvey-responds-to-my-blog/ | letter_to_business_2006.txt | Letter to Business 2.0 | 2006 | letter | 3
+
+Art Theme Essays (1999-2018)
+https://www.trippingly.net/burning-man-musings/1999-art-theme-wheel-of-time | theme_wheel_of_time_1999.txt | 1999 Art Theme: Wheel of Time | 1999 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2003-2/03_theme/ | theme_beyond_belief_2003.txt | 2003 Art Theme: Beyond Belief | 2003 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2004-2/04_theme/ | theme_vault_of_heaven_2004.txt | 2004 Art Theme: Vault of Heaven | 2004 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2005-2/05_theme/ | theme_psyche_2005.txt | 2005 Art Theme: Psyche | 2005 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2006-2/06_theme/ | theme_hope_and_fear_2006.txt | 2006 Art Theme: Hope and Fear – The Future | 2006 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2007-2/07_theme/ | theme_green_man_2007.txt | 2007 Art Theme: The Green Man | 2007 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2008-2/08_theme/ | theme_american_dream_2008.txt | 2008 Art Theme: American Dream | 2008 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2009-2/09_theme/ | theme_evolution_2009.txt | 2009 Art Theme: Evolution | 2009 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2010-2/10_theme/ | theme_metropolis_2010.txt | 2010 Art Theme: Metropolis – Life of Cities | 2010 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2011-2/bm11_theme/ | theme_rites_of_passage_2011.txt | 2011 Art Theme: Rites of Passage | 2011 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2012-2/12_theme/ | theme_fertility_2012.txt | 2012 Art Theme: Fertility 2.0 | 2012 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2013-event-archive/bm13_theme/ | theme_cargo_cult_2013.txt | 2013 Art Theme: Cargo Cult (with Stuart Mangrum) | 2013 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2014-event-archive/theme/ | theme_caravansary_2014.txt | 2014 Art Theme: Caravansary (with Stuart Mangrum) | 2014 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2015-event-archive/theme/ | theme_carnival_of_mirrors_2015.txt | 2015 Art Theme: Carnival of Mirrors (with Stuart Mangrum) | 2015 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2016-event-archive/2016-art-theme-da-vincis-workshop/ | theme_da_vinci_workshop_2016.txt | 2016 Art Theme: Da Vinci's Workshop (with Stuart Mangrum) | 2016 | theme_essay | 3
+https://burningman.org/about/history/brc-history/event-archives/2017-event-archive/2017-art-theme-radical-ritual/ | theme_radical_ritual_2017.txt | 2017 Art Theme: Radical Ritual (with Stuart Mangrum) | 2017 | theme_essay | 3
+https://journal.burningman.org/2017/10/philosophical-center/the-theme/i-robot/ | theme_i_robot_2018.txt | 2018 Art Theme: I, Robot (with Stuart Mangrum) | 2018 | theme_essay | 2
+
+Other Major Essays and Speeches
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/cyber/ | burning_man_cyberspace_1997.txt | Burning Man and Cyberspace | 1997 | essay | 2
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/90s_art/ | burning_man_art_1990s_1997.txt | Burning Man and the Art of the 1990s | 1997 | essay | 2
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/la-vie-boheme/ | la_vie_boheme_2000.txt | La Vie Boheme: A History of Burning Man | 2000 | speech | 2
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/viva/ | viva_las_xmas_2002.txt | Viva Las Xmas | 2002 | speech | 2
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/97_speech_1/ | speech_1997.txt | Larry Harvey Speech, 1997 | 1997 | speech | 3
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/98_speech_1/ | speech_1998.txt | Larry Harvey Speech, 1998 | 1998 | speech | 3
+https://burningman.org/programs/philosophical-center/founders-voices/larry-harvey/2003_gonzalez/ | gonzalez_endorsement_2003.txt | Matt Gonzalez Endorsement Speech, 2003 | 2003 | speech | 3
+https://burningman.org/about/history/art-history/perspectives-on-playa-art/early-years/ | early_years_interactive_performance.txt | The Early Years: Reflections on Interactive Performance | 2000s | essay | 3

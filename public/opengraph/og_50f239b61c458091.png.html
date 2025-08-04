@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    
+    
+    @font-face {
+      font-family: 'Berkeley Mono';
+      font-style: normal;
+      font-weight: 400;
+      src: url('file:///Users/jeremy/ok-offline-ecosystem/api/public/fonts/BerkeleyMono-Regular.woff2') format('woff2'),
+           url('file:///Users/jeremy/ok-offline-ecosystem/api/public/fonts/BerkeleyMono-Regular.woff') format('woff');
+    }
+    
+    @font-face {
+      font-family: 'Berkeley Mono';
+      font-style: normal;
+      font-weight: 700;
+      src: url('file:///Users/jeremy/ok-offline-ecosystem/api/public/fonts/BerkeleyMono-Bold.woff2') format('woff2'),
+           url('file:///Users/jeremy/ok-offline-ecosystem/api/public/fonts/BerkeleyMono-Bold.woff') format('woff');
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .opengraph-content {
+      width: 1200px;
+      height: 630px;
+      position: relative;
+      overflow: hidden;
+      background: #000000;
+      color: #FFFFFF;
+      font-family: 'Berkeley Mono', monospace;
+    }
+    
+    .bg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .bg-image {
+      width: 150px;
+      height: 100px;
+    }
+    
+    .content-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px;
+      box-sizing: border-box;
+    }
+    
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 700px;
+    }
+    
+    .logo {
+      width: 300px;
+      height: 300px;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+    
+    .title {
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.3;
+      opacity: 0.8;
+      margin-bottom: 40px;
+    }
+    
+    .meta {
+      font-size: 24px;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .divider {
+      width: 2px;
+      height: 24px;
+      background: #FFFFFF;
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+  
+    <p>"file:///Users/jeremy/ok-offline-ecosystem/api/public/ok_logos/ok_bg_img.png"</p>
+    <div class="opengraph-content">
+      
+      <div class="content-overlay">
+        <div class="content">
+      <img src="file:///Users/jeremy/ok-offline-ecosystem/api/public/ok_logos/ok_bg_img.png" class="bg-image" >
+          
+          <h1 class="title">OK-OFFLINE</h1>
+          <p class='subtitle'>Your offline companion for Black Rock City</p>
+          <div class="meta">
+            <span>OKNOTOK</span>
+            <div class="divider"></div>
+            <span>BRC 2025</span>
+          </div>
+        </div>
+        
+        <img class="logo" src="file:///Users/jeremy/ok-offline-ecosystem/api/public/ok_logos/oknotok_circle_mark.png" alt="OKNOTOK">
+      </div>
+    </div>
+  
+</body>
+</html>
