@@ -1,0 +1,373 @@
+.chat-container
+  .chat-header
+    %h1 Burning Man Guide Chat
+    %p.subtitle Ask me anything about Black Rock City, camps, art, or events
+    
+  #messages.messages-container
+    .message.assistant-message
+      .message-content
+        Welcome to the Burning Man Guide! I can help you discover camps, art installations, events, and share knowledge about Black Rock City. What would you like to know?
+  
+  = form_with url: api_v1_chat_path, method: :post, id: 'chat-form', class: 'chat-form' do |f|
+    .input-group
+      = text_field_tag :message, '', 
+        placeholder: "Ask about camps, art, events, or Burning Man culture...", 
+        class: "chat-input",
+        autocomplete: "off",
+        autofocus: true
+      = submit_tag "Send", class: "send-button", data: { disable_with: "Sending..." }
+
+:css
+  .chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .chat-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 1rem;
+  }
+
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .message {
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .user-message {
+    text-align: right;
+  }
+
+  .user-message .message-content {
+    background: #007bff;
+    color: white;
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 18px;
+    max-width: 70%;
+    text-align: left;
+  }
+
+  .assistant-message .message-content {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    line-height: 1.5;
+  }
+
+  .assistant-message.streaming .message-content::after {
+    content: '▊';
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .entity-highlights {
+    margin-top: 12px;
+    padding: 12px;
+    background: #f0f8ff;
+    border-radius: 6px;
+    border-left: 3px solid #007bff;
+  }
+
+  .pools-context h4 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .pool-group {
+    margin-bottom: 8px;
+  }
+
+  .pool-group h5 {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .entities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .entity-link {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s;
+  }
+
+  .entity-link:hover {
+    background: #007bff;
+    color: white;
+  }
+
+  .chat-form {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  }
+
+  .input-group {
+    display: flex;
+    gap: 12px;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  .send-button {
+    padding: 12px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .send-button:hover {
+    background: #0056b3;
+  }
+
+  .send-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .error {
+    color: #dc3545;
+    font-style: italic;
+  }
+
+  /* Scrollbar styling */
+  .messages-container::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .loading-dots {
+    display: inline-block;
+  }
+
+  .loading-dots::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+  }
+
+:javascript
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('chat-form');
+    const messagesContainer = document.getElementById('messages');
+    const messageInput = document.querySelector('.chat-input');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const message = messageInput.value.trim();
+      if (!message) return;
+      
+      // Add user message
+      appendMessage(message, 'user');
+      
+      // Clear input
+      messageInput.value = '';
+      
+      // Add assistant message container
+      const assistantId = 'assistant-' + Date.now();
+      const assistantMessage = createAssistantMessage(assistantId);
+      messagesContainer.appendChild(assistantMessage);
+      scrollToBottom();
+      
+      console.log('Created assistant message with ID:', assistantId);
+      
+      // Stream response
+      try {
+        const response = await fetch('/api/v1/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ chat: { message } })
+        });
+        
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          
+          for (const line of lines) {
+            if (line.trim() === '') continue; // Skip empty lines
+            
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                document.getElementById(assistantId).classList.remove('streaming');
+                continue;
+              }
+              
+              try {
+                const content = JSON.parse(data);
+                if (typeof content === 'string') {
+                  updateAssistantMessage(assistantId, content);
+                } else if (content.error) {
+                  updateAssistantMessage(assistantId, content.error, true);
+                }
+              } catch (e) {
+                console.error('Error parsing SSE data:', e, 'Line:', line, 'Data:', data);
+              }
+            } else if (line.trim() !== '') {
+              console.warn('Unexpected line format:', line);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        updateAssistantMessage(assistantId, 'Sorry, I encountered an error. Please try again.', true);
+      }
+    });
+    
+    function appendMessage(content, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}-message`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = content;
+      
+      messageDiv.appendChild(contentDiv);
+      messagesContainer.appendChild(messageDiv);
+      scrollToBottom();
+    }
+    
+    function createAssistantMessage(id) {
+      const messageDiv = document.createElement('div');
+      messageDiv.id = id;
+      messageDiv.className = 'message assistant-message streaming';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      
+      messageDiv.appendChild(contentDiv);
+      return messageDiv;
+    }
+    
+    let messageBuffers = {};
+    
+    function updateAssistantMessage(id, content, isError = false) {
+      const messageEl = document.getElementById(id);
+      if (!messageEl) {
+        console.error('Could not find message element with ID:', id);
+        return;
+      }
+      
+      const contentEl = messageEl.querySelector('.message-content');
+      if (!contentEl) {
+        console.error('Could not find content element in message:', id);
+        return;
+      }
+      
+      if (!messageBuffers[id]) {
+        messageBuffers[id] = '';
+      }
+      
+      messageBuffers[id] += content;
+      console.log('Updated message buffer:', messageBuffers[id].length, 'chars');
+      
+      if (isError) {
+        contentEl.innerHTML = `<span class="error">${messageBuffers[id]}</span>`;
+      } else {
+        // Simple markdown parsing
+        const html = messageBuffers[id]
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/\n/g, '<br>');
+        contentEl.innerHTML = html;
+      }
+      
+      scrollToBottom();
+    }
+    
+    function scrollToBottom() {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  });

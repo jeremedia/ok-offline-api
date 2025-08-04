@@ -1,0 +1,262 @@
+.chat-container
+  .chat-header
+    %h1 Burning Man Guide Chat
+    %p.subtitle Powered by Seven Pools of Enliteracy - Ask me anything!
+    
+  #messages.messages-container
+    .message.assistant-message
+      .message-content
+        Welcome! I can help you explore Black Rock City using our Seven Pools of knowledge:
+        %ul
+          %li <strong>Manifest Pool</strong>: Physical items, structures, and objects
+          %li <strong>Experience Pool</strong>: Activities, workshops, and happenings
+          %li <strong>Relational Pool</strong>: People, connections, and relationships
+          %li <strong>Philosophical Pool</strong>: Ideas, principles, and concepts
+          %li <strong>Practical Pool</strong>: Skills, resources, and logistics
+          %li <strong>Collective Pool</strong>: Groups, communities, and gatherings
+          %li <strong>Interface Pool</strong>: Boundaries, transitions, and connections
+        
+        What would you like to explore?
+  
+  = form_with url: api_v1_chat_with_turbo_path, data: { turbo_stream: true }, class: 'chat-form' do |f|
+    .input-group
+      = text_field_tag 'chat[message]', '', 
+        placeholder: "Ask about camps, art, events, or Burning Man culture...", 
+        class: "chat-input",
+        autocomplete: "off",
+        autofocus: true
+      = submit_tag "Send", class: "send-button"
+
+:css
+  .chat-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .chat-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .message {
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .user-message {
+    text-align: right;
+  }
+
+  .user-message .message-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 20px 20px 4px 20px;
+    max-width: 70%;
+    text-align: left;
+  }
+
+  .assistant-message .message-content {
+    background: white;
+    padding: 16px 20px;
+    border-radius: 4px 20px 20px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    line-height: 1.6;
+  }
+
+  .assistant-message .message-content ul {
+    margin: 12px 0;
+    padding-left: 20px;
+  }
+
+  .assistant-message .message-content li {
+    margin: 6px 0;
+  }
+
+  .assistant-message.streaming .message-content::after {
+    content: '▊';
+    animation: blink 1s infinite;
+    color: #667eea;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .entity-highlights {
+    margin-top: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+  }
+
+  .pools-context h4 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .pool-group {
+    margin-bottom: 12px;
+  }
+
+  .pool-group h5 {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .entities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .entity-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background: white;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #444;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .entity-link:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+  }
+
+  .chat-form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  }
+
+  .input-group {
+    display: flex;
+    gap: 12px;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 28px;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+
+  .chat-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .send-button {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .send-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  .send-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .error {
+    color: #dc3545;
+    font-style: italic;
+  }
+
+  /* Scrollbar styling */
+  .messages-container::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 10px;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+
+:javascript
+  document.addEventListener('turbo:stream-connect', () => {
+    const messages = document.getElementById('messages');
+    if (messages) {
+      setTimeout(() => {
+        messages.scrollTop = messages.scrollHeight;
+      }, 100);
+    }
+  });
+  
+  // Clear input after form submission
+  document.addEventListener('turbo:submit-end', (event) => {
+    if (event.target.classList.contains('chat-form')) {
+      event.target.querySelector('.chat-input').value = '';
+    }
+  });
