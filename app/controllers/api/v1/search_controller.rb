@@ -70,6 +70,37 @@ module Api
         }
       end
       
+      # GET /api/v1/search/entity_counts
+      def entity_counts
+        year = params[:year] || 2025
+        entity_type = params[:entity_type]
+        
+        if entity_type.present?
+          # Get popular entities for a specific type
+          popular = SearchEntity.popular_entities(
+            entity_type: entity_type, 
+            year: year, 
+            limit: params[:limit] || 20
+          )
+          
+          render json: {
+            year: year,
+            entity_type: entity_type,
+            popular_entities: popular,
+            total_count: popular.values.sum
+          }
+        else
+          # Get entity type counts
+          type_counts = SearchEntity.entity_type_counts(year: year)
+          
+          render json: {
+            year: year,
+            entity_type_counts: type_counts,
+            total_entities: type_counts.values.sum
+          }
+        end
+      end
+      
       private
       
       def set_search_service
@@ -91,7 +122,7 @@ module Api
             }
           }, status: :unprocessable_entity
         else
-          render json: {
+          response = {
             results: result[:results],
             meta: {
               total_count: result[:total_count],
@@ -99,6 +130,11 @@ module Api
               search_type: result[:search_type]
             }
           }
+          
+          # Include entity_tag_summary if present
+          response[:entity_tag_summary] = result[:entity_tag_summary] if result[:entity_tag_summary]
+          
+          render json: response
         end
       end
     end

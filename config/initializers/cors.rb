@@ -17,6 +17,9 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       # Allow production domain
       elsif source == "https://offline.oknotok.com"
         true
+      elsif source == "https://dev.offline.oknotok.com"
+        true
+
       else
         false
       end

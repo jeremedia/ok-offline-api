@@ -20,6 +20,8 @@ Rails.application.routes.draw do
           post :entities
           post :suggest
           get :analytics
+          get :entity_counts
+
         end
       end
       

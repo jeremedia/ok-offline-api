@@ -43,14 +43,7 @@ module OkOfflineApi
 
     # hosts
     config.hosts << "offline.oknotok.com"
-    
-    # Persona Style Feature Configuration
-    config.x.persona_style = ActiveSupport::OrderedOptions.new
-    config.x.persona_style.enabled = ENV.fetch('PERSONA_STYLE_ENABLED', 'false') == 'true'
-    config.x.persona_style.ttl_days = ENV.fetch('PERSONA_STYLE_TTL_DAYS', '7').to_i
-    config.x.persona_style.refresh_window_hours = ENV.fetch('PERSONA_STYLE_REFRESH_HOURS', '24').to_i
-    config.x.persona_style.graph_version = ENV.fetch('PERSONA_STYLE_GRAPH_VERSION', '2025.07')
-    config.x.persona_style.lexicon_version = ENV.fetch('PERSONA_STYLE_LEXICON_VERSION', '2025.07')
+    config.hosts << "dev.offline.oknotok.com"
 
   end
 end
