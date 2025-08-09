@@ -3,163 +3,136 @@
 module Api
   module V1
     class ThemesController < Api::V1::BaseController
-      before_action :ensure_development_environment
+      before_action :set_theme, only: [:show, :update, :destroy]
       
       # GET /api/v1/themes
       def index
-        render json: { themes: load_themes }
+        # Cache the theme list for 1 hour
+        @themes = Rails.cache.fetch(
+          "themes/index/#{themes_cache_key}",
+          expires_in: 1.hour
+        ) do
+          themes_hash = {}
+          Theme.active.ordered.each do |theme|
+            themes_hash[theme.theme_id] = theme.to_theme_format
+          end
+          themes_hash
+        end
+        
+        render json: { themes: @themes }
+      end
+      
+      # GET /api/v1/themes/:id
+      def show
+        theme_data = Rails.cache.fetch(
+          "themes/#{@theme.id}/#{@theme.updated_at.to_i}",
+          expires_in: 1.hour
+        ) do
+          @theme.to_theme_format
+        end
+        
+        render json: theme_data
       end
       
       # POST /api/v1/themes
       def create
-        themes = load_themes
-        # Handle both direct params and wrapped params
-        theme_data = params[:theme] || params
-        theme_id = theme_data[:id] || generate_theme_id(theme_data[:name])
+        @theme = Theme.new(theme_params)
         
-        # Validate required fields
-        unless theme_data[:name] && theme_data[:colors]
-          render json: { error: 'Name and colors are required' }, status: :unprocessable_entity
-          return
+        if @theme.save
+          clear_themes_cache
+          render json: { 
+            theme: @theme.to_theme_format, 
+            message: 'Theme created successfully' 
+          }, status: :created
+        else
+          render json: { errors: @theme.errors }, status: :unprocessable_entity
         end
-        
-        themes[theme_id] = build_theme(theme_id)
-        
-        save_themes(themes)
-        render json: { 
-          theme: themes[theme_id], 
-          message: 'Theme saved successfully',
-          total_themes: themes.keys.length
-        }
-      rescue StandardError => e
-        render json: { error: "Failed to save theme: #{e.message}" }, status: :internal_server_error
       end
       
       # PUT/PATCH /api/v1/themes/:id
       def update
-        themes = load_themes
-        theme_id = params[:id]
-        
-        unless themes[theme_id]
-          render json: { error: 'Theme not found' }, status: :not_found
-          return
+        if @theme.update(theme_params)
+          clear_themes_cache
+          render json: { 
+            theme: @theme.to_theme_format, 
+            message: 'Theme updated successfully' 
+          }
+        else
+          render json: { errors: @theme.errors }, status: :unprocessable_entity
         end
-        
-        # Handle both direct params and wrapped params
-        theme_data = params[:theme] || params
-        
-        # Validate required fields
-        unless theme_data[:name] && theme_data[:colors]
-          render json: { error: 'Name and colors are required' }, status: :unprocessable_entity
-          return
-        end
-        
-        themes[theme_id] = build_theme(theme_id)
-        save_themes(themes)
-        
-        render json: { 
-          theme: themes[theme_id], 
-          message: 'Theme updated successfully' 
-        }
-      rescue StandardError => e
-        render json: { error: "Failed to update theme: #{e.message}" }, status: :internal_server_error
       end
       
       # DELETE /api/v1/themes/:id
       def destroy
-        themes = load_themes
-        theme_id = params[:id]
-        
         # Prevent deletion of factory themes
         factory_themes = %w[oknotok sparkle khaki mush]
-        if factory_themes.include?(theme_id)
+        if factory_themes.include?(@theme.theme_id)
           render json: { error: 'Cannot delete factory themes' }, status: :forbidden
           return
         end
         
-        if themes.delete(theme_id)
-          save_themes(themes)
-          render json: { message: 'Theme deleted successfully' }
-        else
-          render json: { error: 'Theme not found' }, status: :not_found
-        end
+        @theme.destroy
+        clear_themes_cache
+        render json: { message: 'Theme deleted successfully' }
       end
       
       private
       
-      def ensure_development_environment
-        unless Rails.env.development?
-          render json: { 
-            error: 'This endpoint is only available in development environment' 
-          }, status: :forbidden
-        end
-      end
-      
-      def themes_file_path
-        # Primary path - always check first
-        primary_path = Rails.root.join("..", "frontend", "public", "data", "themes.json")
-        return primary_path if File.exist?(primary_path)
-        
-        # Development worktree fallback
-        if Rails.env.development?
-          # Check for any frontend-* worktree directories
-          worktree_paths = Dir.glob(Rails.root.join("..", "frontend-*", "public", "data", "themes.json"))
-          if worktree_paths.any?
-            Rails.logger.info "Using worktree themes.json: #{worktree_paths.first}"
-            return Pathname.new(worktree_paths.first)
-          end
-        end
-        
-        # If no themes.json found, return primary path (will fail with clear error)
-        primary_path
-      end
-      
-      def load_themes
-        file_content = File.read(themes_file_path)
-        JSON.parse(file_content)['themes'] || {}
-      rescue JSON::ParserError => e
-        Rails.logger.error "Failed to parse themes.json: #{e.message}"
-        {}
-      end
-      
-      def save_themes(themes)
-        # Create backup before saving
-        backup_path = themes_file_path.to_s + '.backup'
-        FileUtils.copy(themes_file_path, backup_path) if File.exist?(themes_file_path)
-        
-        # Write formatted JSON
-        File.write(themes_file_path, JSON.pretty_generate({ themes: themes }))
-      end
-      
-      def generate_theme_id(name)
-        name.downcase.gsub(/[^a-z0-9]/, '-').gsub(/-+/, '-').gsub(/^-|-$/, '')
-      end
-      
-      def build_theme(theme_id)
-        # Handle both direct params and wrapped params
-        theme_data = params[:theme] || params
-        
-        # Extract colors properly, handling ActionController::Parameters
-        colors = if theme_data[:colors].is_a?(ActionController::Parameters)
-          theme_data[:colors].to_unsafe_h.stringify_keys
-        else
-          theme_data[:colors].to_h.stringify_keys
-        end
-        
-        {
-          'id' => theme_id,
-          'name' => theme_data[:name],
-          'description' => theme_data[:description] || '',
-          'colors' => colors
-        }
+      def set_theme
+        @theme = Theme.find_by!(theme_id: params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Theme not found' }, status: :not_found
       end
       
       def theme_params
-        if params[:theme]
-          params.require(:theme).permit(:id, :name, :description, colors: {})
+        # Handle both direct params and wrapped params
+        theme_data = params[:theme] || params
+        
+        processed_params = {}
+        processed_params[:theme_id] = theme_data[:id] || generate_theme_id(theme_data[:name])
+        processed_params[:name] = theme_data[:name]
+        processed_params[:description] = theme_data[:description]
+        processed_params[:colors] = process_colors(theme_data[:colors])
+        processed_params[:typography] = process_typography(theme_data[:typography])
+        processed_params[:position] = theme_data[:position] if theme_data[:position]
+        processed_params[:active] = theme_data.key?(:active) ? theme_data[:active] : true
+        
+        processed_params
+      end
+      
+      def process_colors(colors_param)
+        return {} unless colors_param
+        
+        if colors_param.is_a?(ActionController::Parameters)
+          colors_param.to_unsafe_h.stringify_keys
         else
-          params.permit(:id, :name, :description, colors: {})
+          colors_param.to_h.stringify_keys
         end
+      end
+      
+      def process_typography(typography_param)
+        return nil unless typography_param
+        
+        if typography_param.is_a?(ActionController::Parameters)
+          typography_param.to_unsafe_h.stringify_keys
+        else
+          typography_param.to_h.stringify_keys
+        end
+      end
+      
+      def generate_theme_id(name)
+        return nil unless name
+        name.downcase.gsub(/[^a-z0-9]/, '-').gsub(/-+/, '-').gsub(/^-|-$/, '')
+      end
+      
+      def themes_cache_key
+        # Include the latest theme update time in cache key
+        latest_update = Theme.maximum(:updated_at)
+        "v1/#{latest_update&.to_i}"
+      end
+      
+      def clear_themes_cache
+        Rails.cache.delete_matched("themes/*")
       end
     end
   end

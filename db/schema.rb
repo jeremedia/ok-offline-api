@@ -325,6 +325,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["persona_id", "era", "rights_scope", "graph_version", "lexicon_version"], name: "idx_style_capsules_lookup"
   end
 
+  create_table "themes", force: :cascade do |t|
+    t.string "theme_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.json "colors", null: false
+    t.json "typography"
+    t.integer "position", default: 0
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active", "position"], name: "index_themes_on_active_and_position"
+    t.index ["theme_id"], name: "index_themes_on_theme_id", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_usages", "agents"
