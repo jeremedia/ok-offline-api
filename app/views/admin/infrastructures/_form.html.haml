@@ -1,0 +1,178 @@
+- if @infrastructure.errors.any?
+  .alert
+    %strong= pluralize(@infrastructure.errors.count, "error") + " prohibited this infrastructure from being saved:"
+    %ul
+      - @infrastructure.errors.full_messages.each do |message|
+        %li= message
+
+= form_with model: [:admin, @infrastructure], local: true do |f|
+  .card
+    %h3 Basic Information
+    
+    .form-group
+      = f.label :name
+      = f.text_field :name, required: true
+    
+    .form-group
+      = f.label :uid, "Unique ID (slug)"
+      = f.text_field :uid
+      %small.text-muted Leave blank to auto-generate from name
+    
+    .form-group
+      = f.label :icon, "Icon (emoji)"
+      = f.text_field :icon, required: true, maxlength: 4
+    
+    .form-group
+      = f.label :category
+      = f.select :category, options_for_select([['Civic Structures', 'civic'], ['City Services', 'services'], ['Commerce', 'commerce'], ['Infrastructure', 'infrastructure']], @infrastructure.category), {}, required: true
+    
+    .form-group
+      = f.label :position, "Display Order"
+      = f.number_field :position
+    
+    .form-group
+      = f.label :active
+      = f.check_box :active
+      %label{for: "infrastructure_active"} Active (visible in app)
+  
+  .card
+    %h3 Location
+    
+    .form-group
+      = f.label :address, "Primary Address"
+      = f.text_field :address, placeholder: "e.g., 6:30 & Esplanade"
+    
+    .form-group
+      = f.label :latitude
+      = f.number_field :latitude, step: :any
+    
+    .form-group
+      = f.label :longitude
+      = f.number_field :longitude, step: :any
+  
+  .card
+    %h3 Content
+    
+    .form-group
+      = f.label :short_description
+      = f.text_area :short_description, rows: 3
+    
+    .form-group
+      = f.label :history
+      = f.text_area :history, rows: 6
+    
+    .form-group
+      = f.label :civic_purpose
+      = f.text_area :civic_purpose, rows: 6
+    
+    .form-group
+      = f.label :legal_context
+      = f.text_area :legal_context, rows: 6
+    
+    .form-group
+      = f.label :operations
+      = f.text_area :operations, rows: 6
+  
+  .card
+    %h3 Hero Photo
+    
+    - if @infrastructure.hero_photo
+      .current-hero
+        %p Current hero photo:
+        - if @infrastructure.hero_photo.image_attached?
+          = image_tag @infrastructure.hero_photo.image, style: "max-width: 300px"
+        - elsif @infrastructure.hero_photo.photo_url
+          = image_tag @infrastructure.hero_photo.photo_url, style: "max-width: 300px"
+    
+    .form-group
+      = f.label :hero_image, "Upload New Hero Image"
+      = f.file_field :hero_image, accept: "image/*"
+  
+  .card
+    %h3 Multiple Locations
+    %p Add additional locations for this infrastructure
+    
+    #locations-fields
+      = f.fields_for :locations do |location_fields|
+        .nested-fields
+          .form-group
+            = location_fields.label :name
+            = location_fields.text_field :name
+          
+          .form-group
+            = location_fields.label :address
+            = location_fields.text_field :address
+          
+          .form-group
+            = location_fields.label :latitude
+            = location_fields.number_field :latitude, step: :any
+          
+          .form-group
+            = location_fields.label :longitude
+            = location_fields.number_field :longitude, step: :any
+          
+          .form-group
+            = location_fields.label :notes
+            = location_fields.text_area :notes, rows: 2
+          
+          = location_fields.hidden_field :_destroy
+          = link_to "Remove Location", "#", class: "remove-field"
+    
+    = link_to "Add Location", "#", class: "add-field", data: { target: "#locations-fields" }
+  
+  .card
+    %h3 Timeline Events
+    
+    #timeline-fields
+      = f.fields_for :timeline_events do |timeline_fields|
+        .nested-fields
+          .form-group
+            = timeline_fields.label :year
+            = timeline_fields.number_field :year, min: 1986, max: Date.current.year + 1
+          
+          .form-group
+            = timeline_fields.label :event
+            = timeline_fields.text_area :event, rows: 2
+          
+          = timeline_fields.hidden_field :_destroy
+          = link_to "Remove Event", "#", class: "remove-field"
+    
+    = link_to "Add Timeline Event", "#", class: "add-field", data: { target: "#timeline-fields" }
+  
+  .card
+    %h3 Did You Know Facts
+    
+    #facts-fields
+      = f.fields_for :facts do |fact_fields|
+        .nested-fields
+          .form-group
+            = fact_fields.label :content, "Fact"
+            = fact_fields.text_area :content, rows: 2
+          
+          = fact_fields.hidden_field :_destroy
+          = link_to "Remove Fact", "#", class: "remove-field"
+    
+    = link_to "Add Fact", "#", class: "add-field", data: { target: "#facts-fields" }
+  
+  .card
+    %h3 Related Links
+    
+    #links-fields
+      = f.fields_for :links do |link_fields|
+        .nested-fields
+          .form-group
+            = link_fields.label :title
+            = link_fields.text_field :title
+          
+          .form-group
+            = link_fields.label :url
+            = link_fields.url_field :url
+          
+          = link_fields.hidden_field :_destroy
+          = link_to "Remove Link", "#", class: "remove-field"
+    
+    = link_to "Add Link", "#", class: "add-field", data: { target: "#links-fields" }
+  
+  .actions
+    = f.submit class: 'btn'
+    = link_to 'Cancel', admin_infrastructures_path, class: 'btn btn-secondary'

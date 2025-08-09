@@ -1,0 +1,56 @@
+.card
+  %h2 
+    Upload Photo for 
+    = @infrastructure.icon
+    = @infrastructure.name
+
+= form_with model: [:admin, @infrastructure, @photo], local: true do |f|
+  - if @photo.errors.any?
+    .alert
+      %strong= pluralize(@photo.errors.count, "error") + " prohibited this photo from being saved:"
+      %ul
+        - @photo.errors.full_messages.each do |message|
+          %li= message
+  
+  .form-group
+    = f.label :image, "Select Image File"
+    = f.file_field :image, accept: "image/*", required: true
+  
+  .form-group
+    = f.label :title
+    = f.text_field :title, placeholder: "e.g., The Man 2024"
+  
+  .form-group
+    = f.label :caption
+    = f.text_area :caption, rows: 2, placeholder: "Brief description of the photo"
+  
+  .form-group
+    = f.label :photo_type, "Photo Type"
+    = f.select :photo_type, options_for_select([
+      ['General', 'general'],
+      ['Man Design', 'man_design'],
+      ['Temple Design', 'temple_design'],
+      ['Historical', 'historical'],
+      ['Aerial', 'aerial']
+    ]), { prompt: 'Select type...' }
+  
+  .form-group
+    = f.label :year
+    = f.number_field :year, min: 1986, max: Date.current.year + 1, value: Date.current.year
+  
+  .form-group
+    = f.label :theme_name, "Event Theme (if applicable)"
+    = f.text_field :theme_name, placeholder: "e.g., Radical Ritual"
+    %small.text-muted For Man/Temple designs, enter the year's theme
+  
+  .form-group
+    = f.label :photographer_credit, "Photographer Credit"
+    = f.text_field :photographer_credit, placeholder: "e.g., John Doe"
+  
+  .form-group
+    = f.label :position, "Display Order"
+    = f.number_field :position
+  
+  .actions
+    = f.submit 'Upload Photo', class: 'btn'
+    = link_to 'Cancel', admin_infrastructure_photos_path(@infrastructure), class: 'btn btn-secondary'

@@ -1,0 +1,65 @@
+.card
+  %h2 
+    Photos for 
+    = @infrastructure.icon
+    = @infrastructure.name
+  
+  .actions
+    = link_to 'Upload New Photo', new_admin_infrastructure_photo_path(@infrastructure), class: 'btn'
+    = link_to 'Back to Infrastructure', admin_infrastructure_path(@infrastructure), class: 'btn btn-secondary'
+
+- if @infrastructure.hero_photo
+  .card
+    %h3 Hero Photo
+    .photo-card{style: "max-width: 600px; margin: 0 auto"}
+      - if @infrastructure.hero_photo.image_attached?
+        = image_tag @infrastructure.hero_photo.image, style: "width: 100%"
+      - elsif @infrastructure.hero_photo.photo_url
+        = image_tag @infrastructure.hero_photo.photo_url, style: "width: 100%"
+      
+      .photo-card-body
+        %h4= @infrastructure.hero_photo.title
+        - if @infrastructure.hero_photo.caption
+          %p= @infrastructure.hero_photo.caption
+        %p
+          %strong Type: 
+          = @infrastructure.hero_photo.photo_type&.humanize || 'General'
+          - if @infrastructure.hero_photo.year
+            | 
+            %strong Year: 
+            = @infrastructure.hero_photo.year
+          - if @infrastructure.hero_photo.photographer_credit
+            | 
+            %strong Photo by: 
+            = @infrastructure.hero_photo.photographer_credit
+        
+        .actions
+          = link_to 'Edit', edit_admin_infrastructure_photo_path(@infrastructure, @infrastructure.hero_photo), 
+                    class: 'btn btn-secondary'
+
+- if @photos_by_type['man_design'].present?
+  .card
+    %h3 Man Designs (#{@photos_by_type['man_design'].count})
+    .photo-grid
+      - @photos_by_type['man_design'].each do |photo|
+        = render 'photo_card', photo: photo, infrastructure: @infrastructure
+
+- if @photos_by_type['temple_design'].present?
+  .card
+    %h3 Temple Designs (#{@photos_by_type['temple_design'].count})
+    .photo-grid
+      - @photos_by_type['temple_design'].each do |photo|
+        = render 'photo_card', photo: photo, infrastructure: @infrastructure
+
+- other_photos = @photos.reject { |p| p == @infrastructure.hero_photo || ['man_design', 'temple_design'].include?(p.photo_type) }
+- if other_photos.any?
+  .card
+    %h3 Other Photos (#{other_photos.count})
+    .photo-grid
+      - other_photos.each do |photo|
+        = render 'photo_card', photo: photo, infrastructure: @infrastructure
+
+- if @photos.empty?
+  .card
+    %p No photos uploaded yet.
+    = link_to 'Upload First Photo', new_admin_infrastructure_photo_path(@infrastructure), class: 'btn'

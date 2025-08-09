@@ -37,6 +37,9 @@ Rails.application.routes.draw do
       # Tile package endpoint
       get 'tiles/package.zip', to: 'tiles#package'
       
+      # Infrastructure endpoints
+      resources :infrastructures, only: [:index, :show], param: :id
+      
       # MCP Server endpoints  
       match 'mcp/sse', to: 'mcp/mcp#sse', via: [:get, :post]
       post 'mcp/tools', to: 'mcp/mcp#tools'
@@ -44,6 +47,31 @@ Rails.application.routes.draw do
       # Chat endpoints
       post 'chat', to: 'chat#create'
       post 'chat/responses', to: 'responses_chat#create' # New Responses API with MCP
+      
+      # Development-only theme editing
+      if Rails.env.development?
+        resources :themes, only: [:index, :create, :update, :destroy]
+      end
+    end
+  end
+  
+  # Admin interface for infrastructure (development only)
+  if Rails.env.development?
+    namespace :admin do
+      resources :infrastructures do
+        resources :locations
+        resources :timeline_events
+        resources :facts
+        resources :links
+        resources :photos do
+          member do
+            patch :set_as_hero
+          end
+          collection do
+            post :bulk_upload
+          end
+        end
+      end
     end
   end
 

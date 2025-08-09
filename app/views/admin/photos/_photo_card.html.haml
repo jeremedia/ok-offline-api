@@ -1,0 +1,26 @@
+.photo-card
+  - if photo.image_attached?
+    = image_tag photo.image
+  - elsif photo.photo_url
+    = image_tag photo.photo_url
+  
+  .photo-card-body
+    %strong= photo.title || "Untitled"
+    %br
+    %small
+      = photo.photo_type&.humanize || 'General'
+      - if photo.year
+        | #{photo.year}
+      - if photo.theme_name
+        %br
+        Theme: #{photo.theme_name}
+    
+    .actions{style: "margin-top: 0.5rem"}
+      - unless photo == infrastructure.hero_photo
+        = link_to 'Set as Hero', set_as_hero_admin_infrastructure_photo_path(infrastructure, photo), 
+                  method: :patch, class: 'btn btn-secondary', style: 'font-size: 0.75rem; padding: 0.25rem 0.5rem'
+      = link_to 'Edit', edit_admin_infrastructure_photo_path(infrastructure, photo), 
+                class: 'btn btn-secondary', style: 'font-size: 0.75rem; padding: 0.25rem 0.5rem'
+      = link_to 'Delete', admin_infrastructure_photo_path(infrastructure, photo), 
+                method: :delete, data: { confirm: 'Are you sure?' }, 
+                class: 'btn btn-danger', style: 'font-size: 0.75rem; padding: 0.25rem 0.5rem'

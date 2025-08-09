@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Admin</title>
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2'),
+                 url('/fonts/BerkeleyMono-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #8B0000;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .nav {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 0 2rem;
+        }
+        
+        .nav button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav button:hover,
+        .nav button.active {
+            border-bottom-color: #8B0000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #8B0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: #a00000;
+        }
+        
+        .btn-secondary {
+            background: #666;
+        }
+        
+        .btn-secondary:hover {
+            background: #777;
+        }
+        
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input[type="text"], 
+        input[type="number"], 
+        input[type="url"], 
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #666;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .photo-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .photo-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .photo-card-body {
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Infrastructure Admin</h1>
+    </header>
+    
+    <nav class="nav">
+        <button onclick="showList()" class="active">All Infrastructure</button>
+        <button onclick="showNew()">Add New</button>
+        <button onclick="importData()">Import from JSON</button>
+    </nav>
+    
+    <div class="container">
+        <div id="messages"></div>
+        <div id="content"></div>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Infrastructure</h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Form will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = '/admin/infrastructures';
+        let currentData = [];
+        
+        // Show messages
+        function showMessage(message, type = 'success') {
+            const msgDiv = document.getElementById('messages');
+            msgDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => msgDiv.innerHTML = '', 5000);
+        }
+        
+        // Load and display infrastructure list
+        async function showList() {
+            document.getElementById('content').innerHTML = '<div class="loading">Loading...</div>';
+            
+            try {
+                const response = await fetch(API_BASE, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                currentData = await response.json();
+                
+                let html = `
+                    <div class="card">
+                        <h2>Infrastructure Management</h2>
+                        <button class="btn" onclick="showNew()">Add New Infrastructure</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Locations</th>
+                                <th>Photos</th>
+                                <th>Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                currentData.forEach(item => {
+                    html += `
+                        <tr>
+                            <td>${item.icon}</td>
+                            <td>
+                                <strong>${item.name}</strong><br>
+                                <small>${item.uid}</small>
+                            </td>
+                            <td>${item.category}</td>
+                            <td>${item.locations ? item.locations.length : 0}</td>
+                            <td>${item.photos ? item.photos.length : 0} ${item.hero_photo ? '⭐' : ''}</td>
+                            <td>${item.active ? '✓' : '✗'}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-secondary" onclick="showEdit('${item.uid}')">Edit</button>
+                                    <button class="btn btn-secondary" onclick="managePhotos('${item.uid}')">Photos</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                document.getElementById('content').innerHTML = html;
+                
+            } catch (error) {
+                showMessage('Error loading infrastructure: ' + error.message, 'error');
+            }
+        }
+        
+        // Show new infrastructure form
+        function showNew() {
+            const form = buildForm({});
+            document.getElementById('modalTitle').textContent = 'New Infrastructure';
+            document.getElementById('modalBody').innerHTML = form;
+            document.getElementById('editModal').style.display = 'block';
+        }
+        
+        // Show edit form
+        async function showEdit(uid) {
+            try {
+                const response = await fetch(`${API_BASE}/${uid}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await response.json();
+                
+                const form = buildForm(data);
+                document.getElementById('modalTitle').textContent = `Edit: ${data.icon} ${data.name}`;
+                document.getElementById('modalBody').innerHTML = form;
+                document.getElementById('editModal').style.display = 'block';
+                
+            } catch (error) {
+                showMessage('Error loading infrastructure: ' + error.message, 'error');
+            }
+        }
+        
+        // Build form HTML
+        function buildForm(data) {
+            return `
+                <form id="infraForm" onsubmit="saveInfrastructure(event)">
+                    <input type="hidden" name="uid" value="${data.uid || ''}">
+                    
+                    <div class="card">
+                        <h3>Basic Information</h3>
+                        
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" value="${data.name || ''}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Icon (emoji)</label>
+                            <input type="text" name="icon" value="${data.icon || ''}" maxlength="4" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select name="category" required>
+                                <option value="civic" ${data.category === 'civic' ? 'selected' : ''}>Civic Structures</option>
+                                <option value="services" ${data.category === 'services' ? 'selected' : ''}>City Services</option>
+                                <option value="commerce" ${data.category === 'commerce' ? 'selected' : ''}>Commerce</option>
+                                <option value="infrastructure" ${data.category === 'infrastructure' ? 'selected' : ''}>Infrastructure</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="active" ${data.active ? 'checked' : ''}>
+                                Active (visible in app)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Content</h3>
+                        
+                        <div class="form-group">
+                            <label>Short Description</label>
+                            <textarea name="short_description" rows="3">${data.shortDescription || ''}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>History</label>
+                            <textarea name="history" rows="6">${data.history || ''}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Civic Purpose</label>
+                            <textarea name="civic_purpose" rows="6">${data.civicPurpose || ''}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Legal Context</label>
+                            <textarea name="legal_context" rows="6">${data.legalContext || ''}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Operations</label>
+                            <textarea name="operations" rows="6">${data.operations || ''}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="submit" class="btn">Save</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            `;
+        }
+        
+        // Save infrastructure
+        async function saveInfrastructure(event) {
+            event.preventDefault();
+            const form = document.getElementById('infraForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                infrastructure: {
+                    name: formData.get('name'),
+                    icon: formData.get('icon'),
+                    category: formData.get('category'),
+                    short_description: formData.get('short_description'),
+                    history: formData.get('history'),
+                    civic_purpose: formData.get('civic_purpose'),
+                    legal_context: formData.get('legal_context'),
+                    operations: formData.get('operations'),
+                    active: formData.get('active') === 'on'
+                }
+            };
+            
+            const uid = formData.get('uid');
+            const url = uid ? `${API_BASE}/${uid}` : API_BASE;
+            const method = uid ? 'PATCH' : 'POST';
+            
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showMessage('Infrastructure saved successfully!');
+                    closeModal();
+                    showList();
+                } else {
+                    const error = await response.json();
+                    showMessage('Error saving: ' + JSON.stringify(error), 'error');
+                }
+            } catch (error) {
+                showMessage('Error saving infrastructure: ' + error.message, 'error');
+            }
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        // Import data from JSON
+        async function importData() {
+            if (confirm('This will import infrastructure from the frontend JSON file. Continue?')) {
+                try {
+                    const response = await fetch('/api/v1/admin/import_infrastructure', {
+                        method: 'POST'
+                    });
+                    
+                    if (response.ok) {
+                        showMessage('Import completed successfully!');
+                        showList();
+                    } else {
+                        showMessage('Error importing data', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Import error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        // Photo management
+        function managePhotos(uid) {
+            window.location.href = `/admin/photos.html?infrastructure=${uid}`;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', showList);
+        
+        // Close modal on click outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('editModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

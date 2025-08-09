@@ -1,0 +1,135 @@
+.card
+  %h2
+    = @infrastructure.icon
+    = @infrastructure.name
+  
+  .actions
+    = link_to 'Edit', edit_admin_infrastructure_path(@infrastructure), class: 'btn'
+    = link_to 'Manage Photos', admin_infrastructure_photos_path(@infrastructure), class: 'btn btn-secondary'
+    = link_to 'Delete', admin_infrastructure_path(@infrastructure), method: :delete, 
+              data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
+
+.card
+  %h3 Basic Information
+  %table
+    %tr
+      %th UID:
+      %td= @infrastructure.uid
+    %tr
+      %th Category:
+      %td= @infrastructure.category.humanize
+    %tr
+      %th Active:
+      %td= @infrastructure.active? ? 'Yes' : 'No'
+    %tr
+      %th Position:
+      %td= @infrastructure.position
+    - if @infrastructure.coordinates
+      %tr
+        %th Coordinates:
+        %td= @infrastructure.coordinates.join(', ')
+    - if @infrastructure.address
+      %tr
+        %th Address:
+        %td= @infrastructure.address
+
+- if @infrastructure.short_description.present?
+  .card
+    %h3 Short Description
+    %p= @infrastructure.short_description
+
+- if @infrastructure.history.present?
+  .card
+    %h3 History
+    %p= simple_format(@infrastructure.history)
+
+- if @infrastructure.civic_purpose.present?
+  .card
+    %h3 Civic Purpose
+    %p= simple_format(@infrastructure.civic_purpose)
+
+- if @infrastructure.legal_context.present?
+  .card
+    %h3 Legal Context
+    %p= simple_format(@infrastructure.legal_context)
+
+- if @infrastructure.operations.present?
+  .card
+    %h3 Operations
+    %p= simple_format(@infrastructure.operations)
+
+- if @infrastructure.locations.any?
+  .card
+    %h3 Locations (#{@infrastructure.locations.count})
+    %table
+      %thead
+        %tr
+          %th Name
+          %th Address
+          %th Coordinates
+          %th Notes
+      %tbody
+        - @infrastructure.locations.each do |location|
+          %tr
+            %td= location.name
+            %td= location.address
+            %td= location.coordinates&.join(', ')
+            %td= location.notes
+
+- if @infrastructure.timeline_events.any?
+  .card
+    %h3 Timeline (#{@infrastructure.timeline_events.count} events)
+    %table
+      %thead
+        %tr
+          %th Year
+          %th Event
+      %tbody
+        - @infrastructure.timeline_events.each do |event|
+          %tr
+            %td= event.year
+            %td= event.event
+
+- if @infrastructure.facts.any?
+  .card
+    %h3 Did You Know? (#{@infrastructure.facts.count} facts)
+    %ul
+      - @infrastructure.facts.each do |fact|
+        %li= fact.content
+
+- if @infrastructure.links.any?
+  .card
+    %h3 Related Links (#{@infrastructure.links.count})
+    %ul
+      - @infrastructure.links.each do |link|
+        %li
+          = link_to link.title, link.url, target: '_blank'
+
+- if @infrastructure.hero_photo || @infrastructure.photos.any?
+  .card
+    %h3 Photos
+    - if @infrastructure.hero_photo
+      %h4 Hero Photo
+      .photo-card{style: "max-width: 400px"}
+        - if @infrastructure.hero_photo.image_attached?
+          = image_tag @infrastructure.hero_photo.image
+        - elsif @infrastructure.hero_photo.photo_url
+          = image_tag @infrastructure.hero_photo.photo_url
+        .photo-card-body
+          %strong= @infrastructure.hero_photo.title
+          - if @infrastructure.hero_photo.caption
+            %p= @infrastructure.hero_photo.caption
+    
+    - if @infrastructure.photos.any?
+      %h4 Gallery (#{@infrastructure.photos.count} photos)
+      .photo-grid
+        - @infrastructure.photos.limit(8).each do |photo|
+          .photo-card
+            - if photo.image_attached?
+              = image_tag photo.image
+            - elsif photo.photo_url
+              = image_tag photo.photo_url
+            .photo-card-body
+              = photo.title
+              %br
+              %small= photo.photo_type&.humanize

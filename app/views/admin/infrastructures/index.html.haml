@@ -1,0 +1,41 @@
+.card
+  %h2 Infrastructure Management
+  
+  = link_to 'Add New Infrastructure', new_admin_infrastructure_path, class: 'btn'
+
+%table
+  %thead
+    %tr
+      %th Icon
+      %th Name
+      %th Category
+      %th Locations
+      %th Photos
+      %th Active
+      %th Actions
+  
+  %tbody
+    - @infrastructures.each do |infra|
+      %tr
+        %td= infra.icon
+        %td
+          %strong= infra.name
+          %br
+          %small= infra.uid
+        %td= infra.category.humanize
+        %td= infra.locations.count
+        %td
+          = infra.photos.count
+          - if infra.hero_photo
+            %span{title: "Has hero photo"} ⭐
+        %td
+          - if infra.active?
+            %span{style: "color: green"} ✓
+          - else
+            %span{style: "color: red"} ✗
+        %td
+          .actions
+            = link_to 'View', admin_infrastructure_path(infra.uid), class: 'btn btn-secondary'
+            = link_to 'Edit', edit_admin_infrastructure_path(infra.uid), class: 'btn btn-secondary'
+            = link_to 'Photos', admin_infrastructure_photos_path(infra.uid), class: 'btn btn-secondary'
+

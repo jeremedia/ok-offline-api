@@ -15,6 +15,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "agent_presets", force: :cascade do |t|
     t.string "name", null: false
     t.string "category", null: false
@@ -136,6 +164,94 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["year"], name: "index_burning_man_years_on_year", unique: true
   end
 
+  create_table "infrastructure_facts", force: :cascade do |t|
+    t.bigint "infrastructure_id", null: false
+    t.text "content"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["infrastructure_id"], name: "index_infrastructure_facts_on_infrastructure_id"
+  end
+
+  create_table "infrastructure_links", force: :cascade do |t|
+    t.bigint "infrastructure_id", null: false
+    t.string "title"
+    t.string "url"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["infrastructure_id"], name: "index_infrastructure_links_on_infrastructure_id"
+  end
+
+  create_table "infrastructure_locations", force: :cascade do |t|
+    t.bigint "infrastructure_id", null: false
+    t.string "name"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.string "address"
+    t.string "notes"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["infrastructure_id"], name: "index_infrastructure_locations_on_infrastructure_id"
+  end
+
+  create_table "infrastructure_photos", force: :cascade do |t|
+    t.bigint "infrastructure_id", null: false
+    t.string "title"
+    t.string "caption"
+    t.integer "year"
+    t.string "photographer_credit"
+    t.string "photo_url"
+    t.string "thumbnail_url"
+    t.integer "position"
+    t.integer "width"
+    t.integer "height"
+    t.string "content_type"
+    t.integer "file_size"
+    t.string "photo_type"
+    t.string "theme_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "active_storage_blob_id"
+    t.index ["infrastructure_id"], name: "index_infrastructure_photos_on_infrastructure_id"
+  end
+
+  create_table "infrastructure_timelines", force: :cascade do |t|
+    t.bigint "infrastructure_id", null: false
+    t.integer "year"
+    t.string "event"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["infrastructure_id"], name: "index_infrastructure_timelines_on_infrastructure_id"
+  end
+
+  create_table "infrastructures", force: :cascade do |t|
+    t.string "uid", null: false
+    t.string "name", null: false
+    t.string "icon", null: false
+    t.string "category", null: false
+    t.string "short_description", limit: 500
+    t.text "history"
+    t.text "civic_purpose"
+    t.text "legal_context"
+    t.text "operations"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.string "address"
+    t.integer "position"
+    t.boolean "active", default: true
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "hero_photo_id"
+    t.index ["category"], name: "index_infrastructures_on_category"
+    t.index ["hero_photo_id"], name: "index_infrastructures_on_hero_photo_id"
+    t.index ["uid"], name: "index_infrastructures_on_uid", unique: true
+    t.index ["year"], name: "index_infrastructures_on_year"
+  end
+
   create_table "search_entities", force: :cascade do |t|
     t.bigint "searchable_item_id"
     t.string "entity_type", null: false
@@ -209,6 +325,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["persona_id", "era", "rights_scope", "graph_version", "lexicon_version"], name: "idx_style_capsules_lookup"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_usages", "agents"
+  add_foreign_key "infrastructure_facts", "infrastructures"
+  add_foreign_key "infrastructure_links", "infrastructures"
+  add_foreign_key "infrastructure_locations", "infrastructures"
+  add_foreign_key "infrastructure_photos", "infrastructures"
+  add_foreign_key "infrastructure_timelines", "infrastructures"
+  add_foreign_key "infrastructures", "infrastructure_photos", column: "hero_photo_id"
   add_foreign_key "search_entities", "searchable_items"
 end

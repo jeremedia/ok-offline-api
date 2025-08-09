@@ -1,0 +1,71 @@
+.card
+  %h2 
+    Edit Photo for 
+    = @infrastructure.icon
+    = @infrastructure.name
+
+- if @photo.image_attached?
+  .card
+    %h3 Current Image
+    = image_tag @photo.image, style: "max-width: 600px"
+- elsif @photo.photo_url
+  .card
+    %h3 Current Image
+    = image_tag @photo.photo_url, style: "max-width: 600px"
+
+= form_with model: [:admin, @infrastructure, @photo], local: true do |f|
+  - if @photo.errors.any?
+    .alert
+      %strong= pluralize(@photo.errors.count, "error") + " prohibited this photo from being saved:"
+      %ul
+        - @photo.errors.full_messages.each do |message|
+          %li= message
+  
+  .form-group
+    = f.label :image, "Replace Image (optional)"
+    = f.file_field :image, accept: "image/*"
+    %small.text-muted Leave blank to keep current image
+  
+  .form-group
+    = f.label :title
+    = f.text_field :title
+  
+  .form-group
+    = f.label :caption
+    = f.text_area :caption, rows: 2
+  
+  .form-group
+    = f.label :photo_type, "Photo Type"
+    = f.select :photo_type, options_for_select([
+      ['General', 'general'],
+      ['Man Design', 'man_design'],
+      ['Temple Design', 'temple_design'],
+      ['Historical', 'historical'],
+      ['Aerial', 'aerial']
+    ], @photo.photo_type), { prompt: 'Select type...' }
+  
+  .form-group
+    = f.label :year
+    = f.number_field :year, min: 1986, max: Date.current.year + 1
+  
+  .form-group
+    = f.label :theme_name, "Event Theme (if applicable)"
+    = f.text_field :theme_name
+  
+  .form-group
+    = f.label :photographer_credit, "Photographer Credit"
+    = f.text_field :photographer_credit
+  
+  .form-group
+    = f.label :position, "Display Order"
+    = f.number_field :position
+  
+  - if @photo.photo_url.present?
+    .form-group
+      = f.label :photo_url, "External URL"
+      = f.url_field :photo_url
+      %small.text-muted Used as fallback if no image is uploaded
+  
+  .actions
+    = f.submit 'Update Photo', class: 'btn'
+    = link_to 'Cancel', admin_infrastructure_photos_path(@infrastructure), class: 'btn btn-secondary'
