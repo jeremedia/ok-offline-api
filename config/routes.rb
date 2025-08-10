@@ -52,6 +52,39 @@ Rails.application.routes.draw do
       if Rails.env.development?
         resources :themes, only: [:index, :create, :update, :destroy]
       end
+      
+      # Camp Management System - OKNOTOK 2025
+      resources :theme_camps, param: :id do
+        member do
+          get :team  # GET /theme_camps/:slug/team
+          get :map   # GET /theme_camps/:slug/map
+        end
+        
+        # Nested team member resources
+        resources :team_members, param: :id do
+          # Personal space for each team member
+          resource :personal_space, only: [:show, :create, :update, :destroy]
+        end
+        
+        # Camp map and placements
+        resource :map, controller: :camp_maps, only: [:show, :create, :update, :destroy] do
+          member do
+            get :stats
+            post :placements, action: :add_placement
+          end
+        end
+      end
+      
+      # GLTF 3D Models (global resource)
+      resources :gltf_models do
+        member do
+          get :download
+          get :preview
+        end
+        collection do
+          get 'categories/:category', action: :by_category
+        end
+      end
     end
   end
   

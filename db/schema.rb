@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_10_195737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -164,6 +164,42 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["year"], name: "index_burning_man_years_on_year", unique: true
   end
 
+  create_table "camp_maps", force: :cascade do |t|
+    t.bigint "theme_camp_id", null: false
+    t.decimal "total_width"
+    t.decimal "total_depth"
+    t.string "bm_address"
+    t.decimal "gps_latitude"
+    t.decimal "gps_longitude"
+    t.decimal "scale_factor"
+    t.decimal "orientation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["theme_camp_id"], name: "index_camp_maps_on_theme_camp_id"
+  end
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "gltf_models", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "category"
+    t.decimal "default_width"
+    t.decimal "default_height"
+    t.decimal "default_depth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "infrastructure_facts", force: :cascade do |t|
     t.bigint "infrastructure_id", null: false
     t.text "content"
@@ -252,6 +288,40 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["year"], name: "index_infrastructures_on_year"
   end
 
+  create_table "map_placements", force: :cascade do |t|
+    t.bigint "camp_map_id", null: false
+    t.string "placement_type"
+    t.string "name"
+    t.text "description"
+    t.decimal "x_position"
+    t.decimal "y_position"
+    t.decimal "rotation"
+    t.decimal "width"
+    t.decimal "height"
+    t.integer "assigned_to_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_map_id"], name: "index_map_placements_on_camp_map_id"
+  end
+
+  create_table "personal_spaces", force: :cascade do |t|
+    t.bigint "team_member_id", null: false
+    t.string "space_type"
+    t.decimal "width"
+    t.decimal "height"
+    t.decimal "depth"
+    t.boolean "needs_power"
+    t.integer "power_draw"
+    t.text "comments"
+    t.decimal "map_x_position"
+    t.decimal "map_y_position"
+    t.decimal "rotation"
+    t.boolean "is_confirmed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_member_id"], name: "index_personal_spaces_on_team_member_id"
+  end
+
   create_table "search_entities", force: :cascade do |t|
     t.bigint "searchable_item_id"
     t.string "entity_type", null: false
@@ -325,6 +395,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
     t.index ["persona_id", "era", "rights_scope", "graph_version", "lexicon_version"], name: "idx_style_capsules_lookup"
   end
 
+  create_table "team_members", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "playa_name"
+    t.string "email"
+    t.string "phone"
+    t.string "role"
+    t.date "arrival_date"
+    t.date "departure_date"
+    t.json "emergency_contact"
+    t.text "dietary_restrictions"
+    t.text "skills"
+    t.boolean "is_verified"
+    t.bigint "theme_camp_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["theme_camp_id"], name: "index_team_members_on_theme_camp_id"
+  end
+
+  create_table "theme_camps", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "burning_man_uid"
+    t.integer "year"
+    t.string "slug"
+    t.boolean "is_active"
+    t.integer "camp_lead_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_theme_camps_on_slug", unique: true
+  end
+
   create_table "themes", force: :cascade do |t|
     t.string "theme_id", null: false
     t.string "name", null: false
@@ -342,11 +444,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_134910) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_usages", "agents"
+  add_foreign_key "camp_maps", "theme_camps"
   add_foreign_key "infrastructure_facts", "infrastructures"
   add_foreign_key "infrastructure_links", "infrastructures"
   add_foreign_key "infrastructure_locations", "infrastructures"
   add_foreign_key "infrastructure_photos", "infrastructures"
   add_foreign_key "infrastructure_timelines", "infrastructures"
   add_foreign_key "infrastructures", "infrastructure_photos", column: "hero_photo_id"
+  add_foreign_key "map_placements", "camp_maps"
+  add_foreign_key "personal_spaces", "team_members"
   add_foreign_key "search_entities", "searchable_items"
+  add_foreign_key "team_members", "theme_camps"
 end

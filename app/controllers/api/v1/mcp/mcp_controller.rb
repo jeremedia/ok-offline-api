@@ -1,29 +1,64 @@
 # frozen_string_literal: true
 
+# MCP (Model Context Protocol) Server Implementation
+#
+# This controller implements a complete MCP server in Rails using Server-Sent Events (SSE)
+# for real-time communication with AI clients like ChatGPT, Claude, and custom applications.
+#
+# Architecture Overview:
+# - JSON-RPC 2.0 protocol over HTTP/SSE
+# - Stateless tool-based architecture
+# - Real-time streaming responses
+# - API key authentication
+# - Graceful error handling
+#
+# For complete implementation guide, see:
+# docs/RAILS_MCP_SERVER_IMPLEMENTATION_GUIDE.md
+#
+# Key endpoints:
+# - GET/POST /api/v1/mcp/sse - Main SSE endpoint for MCP communication
+# - POST /api/v1/mcp/tools - REST endpoint for testing (optional)
+#
 module Api
   module V1
     module Mcp
       class McpController < ApplicationController
-      include ActionController::Live
+      include ActionController::Live  # Required for Server-Sent Events support
 
-      # SSE endpoint for MCP protocol (HTTP/SSE transport)
+      # Main SSE endpoint for MCP protocol communication
+      #
+      # Supports both GET and POST requests for maximum client compatibility:
+      # - GET: Parameters in URL query string
+      # - POST: JSON payload in request body
+      #
+      # Returns Server-Sent Events stream with JSON-RPC 2.0 responses
+      #
+      # Authentication: X-API-Key header or Authorization: Bearer token
+      #
+      # See implementation guide: Step 1 - Create the MCP Controller
       def sse
-        # For HTTP/SSE transport, auth is handled via headers on each request
+        # Authentication: Validate on every request (MCP is stateless)
+        # See implementation guide: Step 1 - Add authentication
         unless valid_mcp_auth?
           render json: { error: "Unauthorized" }, status: :unauthorized
           return
         end
 
-        response.headers["Content-Type"] = "text/event-stream"
-        response.headers["Cache-Control"] = "no-cache"
-        response.headers["Connection"] = "keep-alive"
-        response.headers["X-Accel-Buffering"] = "no"
-        response.headers["Access-Control-Allow-Origin"] = "*"
+        # Configure Server-Sent Events headers
+        # These headers are critical for proper SSE streaming
+        # See implementation guide: Common Gotchas - SSE Buffering Issues
+        response.headers["Content-Type"] = "text/event-stream"    # SSE content type
+        response.headers["Cache-Control"] = "no-cache"              # Prevent caching
+        response.headers["Connection"] = "keep-alive"              # Keep connection open
+        response.headers["X-Accel-Buffering"] = "no"              # Disable nginx buffering
+        response.headers["Access-Control-Allow-Origin"] = "*"      # CORS for SSE
 
         begin
-          # Handle both GET (with params) and POST (with body) requests
+          # Request parsing: Support both GET and POST for maximum client compatibility
+          # See implementation guide: Step 1 - Handle request parsing
           if request.get?
-            # GET request - parameters are in the URL
+            # GET request: JSON-RPC parameters in URL query string
+            # Format: /mcp/sse?jsonrpc=2.0&method=tools/list&id=1
             if params[:jsonrpc].present?
               message = {
                 "jsonrpc" => params[:jsonrpc],
@@ -32,62 +67,84 @@ module Api
                 "params" => params[:params] || {}
               }
             else
-              # Empty GET request means client is establishing SSE connection
+              # Empty GET: Client establishing SSE connection (heartbeat/keepalive)
               response.stream.write(": MCP Server Ready\n\n")
               response.stream.close
               return
             end
           else
-            # POST request - parameters are in the body
+            # POST request: JSON-RPC message in request body (preferred method)
             request_body = request.body.read
 
             if request_body.blank?
-              # Empty request means client is establishing SSE connection
+              # Empty POST: Client establishing SSE connection
               response.stream.write(": MCP Server Ready\n\n")
               response.stream.close
               return
             end
 
+            # Parse JSON-RPC 2.0 message
             message = JSON.parse(request_body)
           end
+          # Log request for debugging and monitoring
           Rails.logger.info "MCP Request: #{message['method']} (id: #{message['id']})"
 
+          # Route message to appropriate handler
+          # See implementation guide: Step 2 - Implement Protocol Handlers
           result = handle_mcp_message(message)
 
-          # Send SSE formatted response with proper event structure
+          # Stream JSON-RPC response using Server-Sent Events format
+          # SSE format: "event: eventname\ndata: payload\n\n"
           response.stream.write("event: message\n")
           response.stream.write("data: #{result.to_json}\n\n")
 
+        # Error handling: JSON-RPC 2.0 error codes and SSE error events
+        # See implementation guide: Common Gotchas - JSON Parsing Errors
         rescue JSON::ParserError => e
+          # JSON-RPC 2.0 Parse Error (-32700)
           error_response = {
             jsonrpc: "2.0",
             error: {
-              code: -32700,
+              code: -32700,  # Standard JSON-RPC parse error code
               message: "Parse error: #{e.message}"
             },
-            id: nil
+            id: nil  # Cannot determine ID from malformed request
           }
           response.stream.write("event: error\n")
           response.stream.write("data: #{error_response.to_json}\n\n")
         rescue => e
+          # Log full error details for debugging
           Rails.logger.error "MCP SSE error: #{e.message}"
           Rails.logger.error e.backtrace.join("\n")
+          
+          # JSON-RPC 2.0 Internal Error (-32603)
           error_response = {
             jsonrpc: "2.0",
             error: {
-              code: -32603,
+              code: -32603,  # Standard JSON-RPC internal error code
               message: "Internal error: #{e.message}"
             },
-            id: message&.dig("id")
+            id: message&.dig("id")  # Preserve original request ID if available
           }
           response.stream.write("event: error\n")
           response.stream.write("data: #{error_response.to_json}\n\n")
         ensure
+          # Critical: Always close SSE stream to prevent connection leaks
+          # See implementation guide: Common Gotchas - Connection Management
           response.stream.close
         end
       end
 
-      # REST endpoint for easier testing
+      # Optional REST endpoint for testing MCP tools without SSE streaming
+      #
+      # This endpoint accepts the same JSON-RPC messages but returns regular HTTP responses
+      # instead of Server-Sent Events. Useful for development and debugging.
+      #
+      # Usage:
+      #   POST /api/v1/mcp/tools
+      #   Content-Type: application/json
+      #   X-API-Key: your-api-key
+      #   Body: {"jsonrpc":"2.0","method":"tools/list","id":1}
       def tools
         message = JSON.parse(request.body.read)
         result = handle_mcp_message(message)
@@ -159,19 +216,31 @@ module Api
         }
       end
 
+      # Main message router: Dispatch JSON-RPC methods to appropriate handlers
+      #
+      # MCP Protocol Methods:
+      # - initialize: Client handshake and capability negotiation
+      # - tools/list: Return available tools and their schemas
+      # - tools/call: Execute a specific tool with arguments
+      #
+      # See implementation guide: Step 2 - Implement Protocol Handlers
       def handle_mcp_message(message)
         case message["method"]
         when "tools/call"
+          # Execute a tool with the provided arguments
           handle_tool_call(message)
         when "tools/list"
+          # Return list of available tools and their input schemas
           handle_tools_list_request(message)
         when "initialize"
+          # Handle client handshake and return server capabilities
           handle_initialize_request(message)
         else
+          # JSON-RPC 2.0 Method Not Found error (-32601)
           {
             jsonrpc: "2.0",
             error: {
-              code: -32601,
+              code: -32601,  # Standard JSON-RPC method not found code
               message: "Method not found: #{message['method']}"
             },
             id: message["id"]
@@ -179,58 +248,88 @@ module Api
         end
       end
 
+      # Tool execution handler: Route tool calls to appropriate service classes
+      #
+      # MCP Tool Call Format:
+      # {
+      #   "jsonrpc": "2.0",
+      #   "method": "tools/call",
+      #   "params": {
+      #     "name": "tool_name",
+      #     "arguments": { "param1": "value1" }
+      #   },
+      #   "id": 1
+      # }
+      #
+      # See implementation guide: Step 3 - Create Tool Services
       def handle_tool_call(message)
         params = message["params"] || {}
         tool_name = params["name"]
         arguments = params["arguments"] || {}
 
+        # Log tool execution for monitoring and debugging
         Rails.logger.info "Tool call: #{tool_name} with args: #{arguments.inspect}"
 
+        # Tool routing: Each tool is implemented as a separate service class
+        # All tools follow the pattern: Mcp::ToolName.call(**arguments)
         case tool_name
         when "search"
+          # Semantic search across the enliterated dataset
           result = ::Mcp::SearchTool.call(**arguments.symbolize_keys)
         when "fetch"
+          # Retrieve detailed information about specific items
           result = ::Mcp::FetchTool.call(**arguments.symbolize_keys)
         when "analyze_pools"
+          # Real-time entity extraction and analysis
           result = ::Mcp::AnalyzePoolsTool.call(**arguments.symbolize_keys)
         when "pool_bridge"
+          # Find connections between concepts or pools
           result = ::Mcp::PoolBridgeTool.call(**arguments.symbolize_keys)
         when "location_neighbors"
+          # Spatial relationship analysis for camps
           result = ::Mcp::LocationNeighborsTool.call(**arguments.symbolize_keys)
         when "set_persona"
+          # Configure persona-based response styling
           result = ::Mcp::SetPersonaTool.call(**arguments.symbolize_keys)
         when "clear_persona"
+          # Remove active persona styling
           result = ::Mcp::ClearPersonaTool.call(**arguments.symbolize_keys)
         else
+          # JSON-RPC 2.0 Invalid Params error (-32602) for unknown tools
           return {
             jsonrpc: "2.0",
             error: {
-              code: -32602,
+              code: -32602,  # Standard JSON-RPC invalid params code
               message: "Unknown tool: #{tool_name}"
             },
             id: message["id"]
           }
         end
 
+        # Format successful tool result according to MCP protocol
+        # MCP requires results to be wrapped in a "content" array with type "text"
         {
           jsonrpc: "2.0",
           result: {
             content: [
               {
-                type: "text",
-                text: result.to_json
+                type: "text",  # MCP content type (text, image, etc.)
+                text: result.to_json  # Tool result serialized as JSON string
               }
             ]
           },
-          id: message["id"]
+          id: message["id"]  # Echo back the original request ID
         }
       rescue => e
+        # Tool execution error handling with detailed logging
         Rails.logger.error "Tool call error (#{tool_name}): #{e.message}"
-        Rails.logger.error e.backtrace.first(5).join("\n")
+        Rails.logger.error e.backtrace.first(5).join("\n")  # Log stack trace for debugging
+        
+        # JSON-RPC 2.0 Internal Error response
         {
           jsonrpc: "2.0",
           error: {
-            code: -32603,
+            code: -32603,  # Standard JSON-RPC internal error code
             message: "Tool execution failed: #{e.message}"
           },
           id: message["id"]
@@ -394,22 +493,40 @@ module Api
         }
       end
 
+      # Authentication: Validate API keys for MCP access
+      #
+      # Supports two authentication methods:
+      # 1. Authorization: Bearer <token>
+      # 2. X-API-Key: <key>
+      #
+      # Security considerations:
+      # - All requests must be authenticated (MCP is stateless)
+      # - Keys should be stored securely (environment variables or database)
+      # - Consider rate limiting and key rotation in production
+      #
+      # See implementation guide: Security Considerations
       def valid_mcp_auth?
-        # Accept either Bearer token or X-API-Key header
+        # Extract authentication credentials from headers
         auth_header = request.headers["Authorization"]
         api_key = request.headers["X-API-Key"]
 
-        # For now, check against environment variable
-        # In production, this should check against a database of valid API keys
+        # TODO: In production, validate against database of API keys with:
+        # - User association
+        # - Rate limiting
+        # - Expiration dates
+        # - Scope restrictions
         expected_key = ENV["MCP_API_KEY"] || "burning-man-seven-pools-2025"
 
+        # Check Bearer token format: "Authorization: Bearer <token>"
         if auth_header&.start_with?("Bearer ")
           token = auth_header.split(" ").last
           return token == expected_key
+        # Check API key header: "X-API-Key: <key>"
         elsif api_key.present?
           return api_key == expected_key
         end
 
+        # Deny access if no valid authentication provided
         false
       end
       end
