@@ -40,7 +40,17 @@ class Api::V1::ThemeCampsController < ApplicationController
   # PATCH/PUT /api/v1/theme_camps/:slug
   def update
     if @theme_camp.update(theme_camp_params)
-      render json: @theme_camp
+      # Return the same detailed format as the show action
+      render json: @theme_camp.as_json(
+        include: {
+          team_members: { 
+            include: { personal_space: { only: [:id, :space_type, :width, :depth, :height, :is_confirmed] } }
+          },
+          camp_map: { 
+            include: { map_placements: { include: :gltf_model } }
+          }
+        }
+      )
     else
       render json: { errors: @theme_camp.errors }, status: :unprocessable_entity
     end

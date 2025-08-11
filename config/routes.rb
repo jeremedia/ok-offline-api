@@ -73,6 +73,17 @@ Rails.application.routes.draw do
             post :placements, action: :add_placement
           end
         end
+        
+        # Camp schedule items
+        resources :schedule_items, controller: :camp_schedule_items do
+          member do
+            post :assign_members
+            delete 'unassign_member/:member_id', action: :unassign_member
+          end
+          collection do
+            get :conflicts
+          end
+        end
       end
       
       # GLTF 3D Models (global resource)

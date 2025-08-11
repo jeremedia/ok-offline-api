@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_10_195737) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_11_195815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -176,6 +176,41 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_195737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["theme_camp_id"], name: "index_camp_maps_on_theme_camp_id"
+  end
+
+  create_table "camp_schedule_assignments", force: :cascade do |t|
+    t.bigint "camp_schedule_item_id", null: false
+    t.bigint "team_member_id", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_schedule_item_id", "team_member_id"], name: "index_schedule_assignments_unique", unique: true
+    t.index ["camp_schedule_item_id"], name: "index_camp_schedule_assignments_on_camp_schedule_item_id"
+    t.index ["team_member_id"], name: "index_camp_schedule_assignments_on_team_member_id"
+  end
+
+  create_table "camp_schedule_items", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.datetime "start_datetime", null: false
+    t.datetime "end_datetime"
+    t.string "location"
+    t.text "required_supplies"
+    t.text "notes"
+    t.integer "category", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "theme_camp_id", null: false
+    t.bigint "responsible_person_id"
+    t.string "api_event_uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_event_uid"], name: "index_camp_schedule_items_on_api_event_uid", unique: true
+    t.index ["category"], name: "index_camp_schedule_items_on_category"
+    t.index ["responsible_person_id"], name: "index_camp_schedule_items_on_responsible_person_id"
+    t.index ["start_datetime"], name: "index_camp_schedule_items_on_start_datetime"
+    t.index ["status"], name: "index_camp_schedule_items_on_status"
+    t.index ["theme_camp_id", "start_datetime"], name: "index_camp_schedule_items_on_theme_camp_id_and_start_datetime"
+    t.index ["theme_camp_id"], name: "index_camp_schedule_items_on_theme_camp_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -445,6 +480,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_195737) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_usages", "agents"
   add_foreign_key "camp_maps", "theme_camps"
+  add_foreign_key "camp_schedule_assignments", "camp_schedule_items"
+  add_foreign_key "camp_schedule_assignments", "team_members"
+  add_foreign_key "camp_schedule_items", "team_members", column: "responsible_person_id"
+  add_foreign_key "camp_schedule_items", "theme_camps"
   add_foreign_key "infrastructure_facts", "infrastructures"
   add_foreign_key "infrastructure_links", "infrastructures"
   add_foreign_key "infrastructure_locations", "infrastructures"
