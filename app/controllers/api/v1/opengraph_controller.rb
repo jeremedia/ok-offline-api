@@ -401,7 +401,7 @@ module Api
               
               <div class="form-group">
                 <label for="url">Enter URL to preview:</label>
-                <input type="url" id="url" placeholder="http://100.104.170.10:8005/2025/camps" value="">
+                <input type="url" id="url" placeholder="https://dev.offline.oknotok.com/2025/camps" value="">
                 <button onclick="fetchOGData()" id="fetchBtn">Fetch OpenGraph Data</button>
               </div>
               

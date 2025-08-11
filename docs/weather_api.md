@@ -162,7 +162,7 @@ Calculated based on wind speed and visibility:
 
 ### JavaScript
 ```javascript
-const response = await fetch('http://100.104.170.10:3555/api/v1/weather/current', {
+const response = await fetch('https://dev.offline.oknotok.com/api/v1/weather/current', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ console.log(`Dust level: ${weather.data.dustLevel}`);
 
 ### cURL
 ```bash
-curl -X POST http://100.104.170.10:3555/api/v1/weather/current \
+curl -X POST https://dev.offline.oknotok.com/api/v1/weather/current \
   -H "Content-Type: application/json" \
   -d '{
     "latitude": 40.7874,

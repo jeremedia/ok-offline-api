@@ -334,8 +334,8 @@ This will:
 ### CORS Configuration
 
 CORS is configured in `config/initializers/cors.rb` to allow requests from:
-- `http://100.104.170.10:8005` (frontend development)
-- `https://offline.oknotok.com` (production frontend)
+- `http://dev.offline.oknotok.com:8005`
+- `https://offline.oknotok.com`
 - Any localhost port in 8000-8999 range
 
 ### Caching

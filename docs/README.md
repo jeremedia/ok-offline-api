@@ -6,8 +6,8 @@ The OK-Offline API provides backend services for the Burning Man offline ecosyst
 
 ## Base URLs
 
-- Development: `http://100.104.170.10:3555`
-- Production: `https://offline.oknotok.com/api/v1` (via proxy)
+- Development: `http://dev.offline.oknotok.com`
+- Production: `https://offline.oknotok.com/api/v1` 
 
 ## API Version
 
@@ -67,7 +67,7 @@ Currently, the API is open access. Future versions will implement:
 ## CORS Policy
 
 The API allows cross-origin requests from:
-- `http://100.104.170.10:8005` (development)
+- `https://dev.offline.oknotok.com` (development)
 - `https://offline.oknotok.com` (production)
 
 ## Rate Limiting
