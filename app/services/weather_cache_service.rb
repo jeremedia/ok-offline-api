@@ -2,17 +2,19 @@
 
 class WeatherCacheService
   CACHE_DURATION = 10.minutes # Cache weather data for 10 minutes
-  CACHE_KEY_PREFIX = 'weather_data'
+  STALE_DURATION = 7.days
+  CACHE_KEY_PREFIX = "weather_data"
 
   def initialize(latitude, longitude)
     @latitude = latitude.to_f.round(4) # Round to 4 decimal places for reasonable precision
     @longitude = longitude.to_f.round(4)
     @cache_key = "#{CACHE_KEY_PREFIX}:#{@latitude}:#{@longitude}"
+    @stale_cache_key = "#{@cache_key}:last_success"
   end
 
   def fetch
     cached_data = Rails.cache.read(@cache_key)
-    
+
     if cached_data
       Rails.logger.info "Weather cache hit for coordinates: #{@latitude}, #{@longitude}"
       add_cache_metadata(cached_data, true)
@@ -26,20 +28,40 @@ class WeatherCacheService
     return unless weather_data && weather_data[:success]
 
     Rails.logger.info "Storing weather data in cache for coordinates: #{@latitude}, #{@longitude}"
-    
+
     # Add timestamp to the cached data
     data_with_timestamp = weather_data.merge(
       cached_at: Time.current.iso8601
     )
-    
+
     Rails.cache.write(@cache_key, data_with_timestamp, expires_in: CACHE_DURATION)
-    
+    Rails.cache.write(@stale_cache_key, data_with_timestamp, expires_in: STALE_DURATION)
+
     add_cache_metadata(data_with_timestamp, false)
   end
 
   def clear
     Rails.cache.delete(@cache_key)
+    Rails.cache.delete(@stale_cache_key)
     Rails.logger.info "Cleared weather cache for coordinates: #{@latitude}, #{@longitude}"
+  end
+
+  def fetch_stale
+    data = Rails.cache.read(@stale_cache_key)
+    return unless data
+
+    cached_at = Time.iso8601(data[:cached_at].to_s)
+    data.merge(
+      cache_info: {
+        from_cache: true,
+        stale: true,
+        cached_at: cached_at.iso8601,
+        age_seconds: (Time.current - cached_at).to_i,
+        cache_key: @stale_cache_key
+      }
+    )
+  rescue ArgumentError
+    nil
   end
 
   def clear_all
@@ -57,14 +79,14 @@ class WeatherCacheService
 
   def add_cache_metadata(data, from_cache)
     return data unless data.is_a?(Hash)
-    
+
     cached_at = data[:cached_at] || Time.current.iso8601
     expires_at = begin
       (Time.parse(cached_at) + CACHE_DURATION).iso8601
     rescue ArgumentError
       (Time.current + CACHE_DURATION).iso8601
     end
-    
+
     data.merge(
       cache_info: {
         from_cache: from_cache,

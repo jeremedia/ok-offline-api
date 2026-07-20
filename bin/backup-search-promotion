@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd "$repo_root"
+
+year="${1:-2026}"
+environment="${RAILS_ENV:-development}"
+if [[ ! "$year" =~ ^[0-9]{4}$ ]]; then
+  echo "year must be four digits" >&2
+  exit 64
+fi
+
+database_name="$(RAILS_ENV="$environment" bin/rails runner 'puts ActiveRecord::Base.connection_db_config.database')"
+data_root="$(RAILS_ENV="$environment" bin/rails runner 'puts Rails.application.config.x.ok_offline_data_root')"
+snapshot_dir="$data_root/$year"
+
+test -f "$snapshot_dir/metadata.json"
+RAILS_ENV="$environment" bin/rails runner - "$year" <<'RUBY'
+year = ARGV.fetch(0).to_i
+service = Search::DataImportService.new(year: year)
+puts "validated_snapshot_year=#{service.year} phase=#{service.metadata.fetch('phase')}"
+RUBY
+
+timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+backup_dir="$repo_root/storage/search-backups/$year/$timestamp"
+database_dump="$backup_dir/database.dump"
+snapshot_archive="$backup_dir/sanitized-snapshot.tar.gz"
+database_partial="$database_dump.partial"
+snapshot_partial="$snapshot_archive.partial"
+
+umask 077
+mkdir -p "$backup_dir"
+cleanup_partial() {
+  if [[ -e "$database_partial" ]]; then unlink "$database_partial"; fi
+  if [[ -e "$snapshot_partial" ]]; then unlink "$snapshot_partial"; fi
+}
+trap cleanup_partial EXIT
+
+pg_dump --format=custom --compress=zstd:6 --no-owner --file="$database_partial" "$database_name"
+mv "$database_partial" "$database_dump"
+
+tar -C "$data_root" -czf "$snapshot_partial" "$year"
+mv "$snapshot_partial" "$snapshot_archive"
+
+(
+  cd "$backup_dir"
+  shasum -a 256 database.dump sanitized-snapshot.tar.gz > checksums.sha256
+)
+
+echo "backup_directory=$backup_dir"
+echo "database_dump=$database_dump"
+echo "snapshot_archive=$snapshot_archive"
+echo "database=$database_name environment=$environment"

@@ -56,7 +56,7 @@ module Api
         begin
           # Request parsing: Support both GET and POST for maximum client compatibility
           # See implementation guide: Step 1 - Handle request parsing
-          if request.get?
+          if request.get? || request.head?
             # GET request: JSON-RPC parameters in URL query string
             # Format: /mcp/sse?jsonrpc=2.0&method=tools/list&id=1
             if params[:jsonrpc].present?

@@ -85,22 +85,10 @@ module Api
           debug_html = Rails.root.join('public', 'opengraph', "#{filename}.html")
           File.write(debug_html, html)
           
-          # Use a separate Ruby process to avoid crashes
-          script = <<~RUBY
-            require 'bundler/setup'
-            require 'himg'
-            
-            html = File.read('#{temp_html}')
-            puts "Rendering HTML with himg..."
-            png_data = Himg.render(html, width: 1200, height: 630)
-            File.open('#{filepath}', 'wb') { |f| f.write(png_data) }
-            puts "Saved PNG: \#{png_data.bytesize} bytes"
-          RUBY
-          
-          # Execute in subprocess with output capture
-          output = `ruby -e "#{script.gsub('"', '\"')}" 2>&1`
-          result = $?.success?
-          Rails.logger.info "Himg output: #{output}" if output.present?
+          png_data = Himg.render(html, width: 1200, height: 630)
+          File.binwrite(filepath, png_data)
+          result = png_data.present?
+          Rails.logger.info "Himg rendered #{png_data.bytesize} bytes"
           
           # Clean up temp file
           File.delete(temp_html) if File.exist?(temp_html)

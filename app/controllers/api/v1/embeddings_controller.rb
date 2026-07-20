@@ -4,51 +4,49 @@ module Api
       # POST /api/v1/embeddings/generate
       def generate
         text = params[:text]
-        
+
         if text.blank?
-          render json: { error: 'Text is required' }, status: :bad_request
+          render json: { error: "Text is required" }, status: :bad_request
           return
         end
-        
+
         embedding_service = Search::EmbeddingService.new
         embedding = embedding_service.generate_embedding(text)
-        
+
         if embedding
           render json: {
             text: text.truncate(100),
             embedding: embedding,
-            model: 'text-embedding-ada-002',
+            model: Search::EmbeddingService::EMBEDDING_MODEL,
             dimensions: embedding.size
           }
         else
-          render json: { error: 'Failed to generate embedding' }, status: :unprocessable_entity
+          render json: { error: "Failed to generate embedding" }, status: :unprocessable_entity
         end
       end
-      
+
       # POST /api/v1/embeddings/batch_import
       def batch_import
-        year = params[:year] || 2025
-        types = params[:types] || ['camp', 'art', 'event']
-        
-        # Run import job asynchronously
-        ImportDataJob.perform_later(year, types)
-        
+        year = params[:year] || Rails.application.config.x.current_burn_year
+        stages = params[:stages].presence || SeasonImportRun::STAGES
+        run = SeasonImportRun.enqueue!(year: year, stages: stages)
+
         render json: {
-          message: 'Import job queued',
+          message: "Import job queued",
           year: year,
-          types: types,
-          job_id: SecureRandom.uuid # In a real app, return actual job ID
+          stages: stages,
+          import_run_id: run.id
         }
       end
-      
+
       # GET /api/v1/embeddings/status
       def status
         total_items = SearchableItem.count
         items_with_embeddings = SearchableItem.with_embedding.count
-        
+
         by_type = SearchableItem.group(:item_type).count
         embeddings_by_type = SearchableItem.with_embedding.group(:item_type).count
-        
+
         render json: {
           total_items: total_items,
           items_with_embeddings: items_with_embeddings,

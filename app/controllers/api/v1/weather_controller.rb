@@ -3,10 +3,10 @@
 module Api
   module V1
     class WeatherController < BaseController
-      before_action :validate_request_params, only: [:current]
+      before_action :validate_request_params, only: [ :current ]
 
 def test
-        render json: { message: 'Weather API is working' }
+        render json: { message: "Weather API is working" }
         end
       # POST /api/v1/weather/current
       def current
@@ -14,7 +14,7 @@ def test
           params[:latitude],
           params[:longitude]
         )
-        
+
         weather_data = weather_aggregator.fetch_weather
 
         if weather_data[:success]
@@ -25,7 +25,7 @@ def test
         end
       rescue StandardError => e
         Rails.logger.error "Weather API error: #{e.message}"
-        render json: error_response('Internal server error'), status: :internal_server_error
+        render json: error_response("Internal server error"), status: :internal_server_error
       end
 
       private
@@ -33,7 +33,7 @@ def test
       def validate_request_params
         # Check required parameters
         unless params[:latitude].present? && params[:longitude].present?
-          render json: error_response('Missing required parameters: latitude and longitude'), 
+          render json: error_response("Missing required parameters: latitude and longitude"),
                  status: :bad_request
           return
         end
@@ -44,18 +44,18 @@ def test
           longitude = Float(params[:longitude])
 
           unless latitude.between?(-90, 90)
-            render json: error_response('Invalid latitude. Must be between -90 and 90'), 
+            render json: error_response("Invalid latitude. Must be between -90 and 90"),
                    status: :bad_request
             return
           end
 
           unless longitude.between?(-180, 180)
-            render json: error_response('Invalid longitude. Must be between -180 and 180'), 
+            render json: error_response("Invalid longitude. Must be between -180 and 180"),
                    status: :bad_request
-            return
+            nil
           end
         rescue ArgumentError
-          render json: error_response('Invalid coordinate format. Please provide numeric values'), 
+          render json: error_response("Invalid coordinate format. Please provide numeric values"),
                  status: :bad_request
         end
       end
@@ -63,11 +63,11 @@ def test
       def format_response(weather_data)
         # Extract the actual weather data from the aggregator response
         data = weather_data[:data] || {}
-        
+
         # Get today's forecast for twilight times
         daily_forecast = data[:forecast_daily] || []
         today_forecast = daily_forecast.first || {}
-        
+
         # Format according to API spec
         {
           data: {
@@ -94,12 +94,14 @@ def test
             astronomicalTwilightEnd: today_forecast[:astronomical_twilight_end]
           },
           meta: {
-            source: weather_data[:source] || 'unknown',
+            source: weather_data[:source] || "unknown",
+            stale: weather_data.dig(:cache_info, :stale) || false,
+            ageSeconds: weather_data.dig(:cache_info, :age_seconds),
             lastUpdated: weather_data.dig(:cache_info, :cached_at) || Time.current.iso8601,
             ttl: 600, # 10 minutes
             latitude: params[:latitude],
             longitude: params[:longitude],
-            timezone: params[:timezone] || data.dig(:metadata, :timezone) || 'America/Los_Angeles'
+            timezone: params[:timezone] || data.dig(:metadata, :timezone) || "America/Los_Angeles"
           }
         }
       end
@@ -123,19 +125,19 @@ def test
       def calculate_dust_level(current_weather)
         # Simple dust level calculation based on wind speed and visibility
         # This is a placeholder - in production you'd want more sophisticated logic
-        return 'unknown' unless current_weather
+        return "unknown" unless current_weather
 
         wind_speed = current_weather[:wind_speed] || 0
         visibility = current_weather[:visibility] || 10
 
         if wind_speed > 25 && visibility < 2
-          'severe'
+          "severe"
         elsif wind_speed > 15 && visibility < 5
-          'moderate'
+          "moderate"
         elsif wind_speed > 10
-          'light'
+          "light"
         else
-          'minimal'
+          "minimal"
         end
       end
 
@@ -172,15 +174,15 @@ def test
 
       def phase_name(phase_percentage)
         case phase_percentage
-        when 0..6 then 'new'
-        when 7..24 then 'waxing crescent'
-        when 25..31 then 'first quarter'
-        when 32..49 then 'waxing gibbous'
-        when 50..56 then 'full'
-        when 57..74 then 'waning gibbous'
-        when 75..81 then 'last quarter'
-        when 82..99 then 'waning crescent'
-        else 'new'
+        when 0..6 then "new"
+        when 7..24 then "waxing crescent"
+        when 25..31 then "first quarter"
+        when 32..49 then "waxing gibbous"
+        when 50..56 then "full"
+        when 57..74 then "waning gibbous"
+        when 75..81 then "last quarter"
+        when 82..99 then "waning crescent"
+        else "new"
         end
       end
 

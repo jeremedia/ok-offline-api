@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_11_195815) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_20_001000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -399,6 +399,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_195815) do
     t.string "url"
     t.string "hometown"
     t.string "location_string"
+    t.datetime "entity_extracted_at"
     t.index ["artist"], name: "index_searchable_items_on_artist"
     t.index ["camp_id"], name: "index_searchable_items_on_camp_id"
     t.index ["embedding"], name: "index_searchable_items_on_embedding", opclass: :vector_cosine_ops, using: :hnsw, comment: "HNSW index for cosine similarity search on embeddings"
@@ -409,9 +410,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_195815) do
     t.index ["name"], name: "index_searchable_items_on_name"
     t.index ["uid"], name: "index_searchable_items_on_uid", unique: true
     t.index ["url"], name: "index_searchable_items_on_url"
+    t.index ["year", "entity_extracted_at"], name: "index_searchable_items_on_year_and_entity_extracted_at"
     t.index ["year", "item_type"], name: "index_searchable_items_on_year_and_item_type"
     t.index ["year", "location_string"], name: "index_searchable_items_on_year_and_location_string"
-    t.check_constraint "item_type::text = ANY (ARRAY['camp'::character varying, 'art'::character varying, 'event'::character varying, 'experience_story'::character varying, 'historical_fact'::character varying, 'infrastructure'::character varying, 'practical_guide'::character varying, 'timeline_event'::character varying, 'essay'::character varying, 'speech'::character varying, 'philosophical_text'::character varying, 'manifesto'::character varying, 'interview'::character varying, 'letter'::character varying, 'note'::character varying, 'theme_essay'::character varying, 'policy_essay'::character varying]::text[])", name: "searchable_items_item_type_check"
+    t.check_constraint "item_type::text = ANY (ARRAY['camp'::character varying::text, 'art'::character varying::text, 'event'::character varying::text, 'experience_story'::character varying::text, 'historical_fact'::character varying::text, 'infrastructure'::character varying::text, 'practical_guide'::character varying::text, 'timeline_event'::character varying::text, 'essay'::character varying::text, 'speech'::character varying::text, 'philosophical_text'::character varying::text, 'manifesto'::character varying::text, 'interview'::character varying::text, 'letter'::character varying::text, 'note'::character varying::text, 'theme_essay'::character varying::text, 'policy_essay'::character varying::text])", name: "searchable_items_item_type_check"
+  end
+
+  create_table "season_import_runs", force: :cascade do |t|
+    t.integer "year", null: false
+    t.string "status", default: "queued", null: false
+    t.string "stage"
+    t.integer "total", default: 0, null: false
+    t.integer "processed", default: 0, null: false
+    t.integer "removed", default: 0, null: false
+    t.jsonb "stages", default: [], null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.text "error_message"
+    t.datetime "started_at"
+    t.datetime "heartbeat_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["heartbeat_at"], name: "index_season_import_runs_on_heartbeat_at"
+    t.index ["year", "status"], name: "index_season_import_runs_on_year_and_status"
   end
 
   create_table "style_capsules", force: :cascade do |t|

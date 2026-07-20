@@ -12,7 +12,7 @@ require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
-# require "rails/test_unit/railtie"
+require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -40,6 +40,10 @@ module OkOfflineApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = false
+    config.x.current_burn_year = ENV.fetch("CURRENT_BURN_YEAR", "2026").to_i
+    config.x.ok_offline_data_root = Pathname.new(
+      ENV.fetch("OK_OFFLINE_DATA_ROOT", Rails.root.join("..", "ok-offline", "public", "data").to_s)
+    ).expand_path
     
     # Add back middleware needed for full Rails
     config.middleware.use ActionDispatch::Cookies

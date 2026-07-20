@@ -22,6 +22,7 @@ class Api::V1::TeamMembersController < ApplicationController
     @team_member = @theme_camp.team_members.build(team_member_params)
     
     if @team_member.save
+      @team_member.photo.attach(team_member_photo) if team_member_photo.present?
       render json: @team_member, status: :created
     else
       render json: { errors: @team_member.errors }, status: :unprocessable_entity
@@ -31,6 +32,7 @@ class Api::V1::TeamMembersController < ApplicationController
   # PATCH/PUT /api/v1/theme_camps/:theme_camp_id/team_members/:id
   def update
     if @team_member.update(team_member_params)
+      @team_member.photo.attach(team_member_photo) if team_member_photo.present?
       render json: @team_member
     else
       render json: { errors: @team_member.errors }, status: :unprocessable_entity
@@ -61,7 +63,11 @@ class Api::V1::TeamMembersController < ApplicationController
     params.require(:team_member).permit(
       :first_name, :last_name, :playa_name, :email, :role, :phone, :skills,
       :arrival_date, :departure_date, :emergency_contact_name, :emergency_contact_phone,
-      :dietary_restrictions, :is_verified, :photo
+      :dietary_restrictions
     )
+  end
+
+  def team_member_photo
+    params.dig(:team_member, :photo)
   end
 end

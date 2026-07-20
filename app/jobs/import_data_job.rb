@@ -1,24 +1,25 @@
 class ImportDataJob < ApplicationJob
   queue_as :default
-  
-  def perform(year, types = ['camp', 'art', 'event'])
-    Rails.logger.info("Starting data import job for year #{year}, types: #{types}")
-    
-    import_service = Search::DataImportService.new
-    
-    types.each do |type|
-      case type
-      when 'camp'
-        import_service.import_camps(year)
-      when 'art'
-        import_service.import_art(year)
-      when 'event'
-        import_service.import_events(year)
-      else
-        Rails.logger.warn("Unknown type: #{type}")
+  retry_on StandardError, wait: :polynomially_longer, attempts: 5
+
+  def perform(run_id)
+    run = SeasonImportRun.find(run_id)
+    run.start!
+    service = Search::DataImportService.new(
+      year: run.year,
+      progress: ->(**progress) { run.progress!(**progress) }
+    )
+
+    run.stages.each do |stage|
+      case stage
+      when "metadata" then service.sync_metadata!
+      when "embeddings" then service.generate_embeddings!
+      when "entities" then service.extract_entities!
       end
     end
-    
-    Rails.logger.info("Data import job completed for year #{year}")
+    run.complete!
+  rescue StandardError => error
+    run&.fail!(error)
+    raise
   end
 end

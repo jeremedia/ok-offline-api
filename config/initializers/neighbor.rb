@@ -27,8 +27,18 @@ module NeighborSearchExtensions
   class_methods do
     # Perform vector search with custom ef_search parameter
     def vector_search_with_config(query_embedding, limit: 20, ef_search: 100)
-      connection.execute("SET LOCAL hnsw.ef_search = #{ef_search}")
-      nearest_neighbors(:embedding, query_embedding, distance: "cosine").limit(limit)
+      safe_ef_search = ef_search.to_i.clamp(1, 1_000)
+      connection.transaction(requires_new: true) do
+        bind = ActiveRecord::Relation::QueryAttribute.new(
+          "ef_search", safe_ef_search.to_s, ActiveRecord::Type::String.new
+        )
+        connection.exec_query(
+          "SELECT set_config('hnsw.ef_search', $1, true)", "Neighbor settings", [ bind ]
+        )
+        connection.execute("SET LOCAL hnsw.iterative_scan = strict_order")
+        connection.execute("SET LOCAL hnsw.max_scan_tuples = 50000")
+        nearest_neighbors(:embedding, query_embedding, distance: "cosine").limit(limit).load
+      end
     end
 
     # Perform high-quality search (slower but more accurate)

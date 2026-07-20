@@ -1,4 +1,4 @@
-require_relative "entity_extraction_schema"
+require_relative "basic_entity_extraction"
 
 module Search
   # BatchBasicEntityExtractionService - Extracts 12 basic entity types using OpenAI Batch API

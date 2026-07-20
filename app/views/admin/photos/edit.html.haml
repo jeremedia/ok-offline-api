@@ -36,13 +36,8 @@
   
   .form-group
     = f.label :photo_type, "Photo Type"
-    = f.select :photo_type, options_for_select([
-      ['General', 'general'],
-      ['Man Design', 'man_design'],
-      ['Temple Design', 'temple_design'],
-      ['Historical', 'historical'],
-      ['Aerial', 'aerial']
-    ], @photo.photo_type), { prompt: 'Select type...' }
+    - photo_type_options = [['General', 'general'], ['Man Design', 'man_design'], ['Temple Design', 'temple_design'], ['Historical', 'historical'], ['Aerial', 'aerial']]
+    = f.select :photo_type, options_for_select(photo_type_options, @photo.photo_type), { prompt: 'Select type...' }
   
   .form-group
     = f.label :year

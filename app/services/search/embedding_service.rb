@@ -1,5 +1,7 @@
 module Search
   class EmbeddingService
+    class UnavailableError < StandardError; end
+    class ProviderError < StandardError; end
     # !!!!! CRITICAL: DO NOT CHANGE THIS MODEL !!!!!
     # This model MUST match what was used to generate existing embeddings in the database.
     # Changing this will break vector similarity search for all existing data.
@@ -9,9 +11,16 @@ module Search
     MAX_TOKENS = 8191 # Maximum for 3-small
 
     def initialize
+      raise UnavailableError, "Vector service is not configured" unless self.class.available?
+
       @client = OpenAI::Client.new(
-        api_key: ENV['OPENAI_API_KEY']
+        api_key: ENV["OPENAI_API_KEY"],
+        base_url: ENV.fetch("OPENAI_BASE_URL", "https://api.openai.com/v1")
       )
+    end
+
+    def self.available?
+      ENV["OPENAI_API_KEY"].present?
     end
 
     def generate_embedding(text)
@@ -30,10 +39,10 @@ module Search
         e = response.data&.first&.embedding
 
         e
-      rescue => e
+      rescue StandardError => e
         Rails.logger.error("OpenAI Embedding Error: #{e.message}")
         Rails.logger.error("Backtrace: #{e.backtrace.first(5).join('\n')}")
-        nil
+        raise ProviderError, e.message
       end
     end
 
@@ -51,9 +60,9 @@ module Search
 
         # Extract all embeddings
         response.data&.map(&:embedding) || []
-      rescue => e
+      rescue StandardError => e
         Rails.logger.error("OpenAI Batch Embedding Error: #{e.message}")
-        []
+        raise ProviderError, e.message
       end
     end
 

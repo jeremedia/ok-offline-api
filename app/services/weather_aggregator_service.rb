@@ -37,7 +37,7 @@ class WeatherAggregatorService
 
     # Try primary source: OpenWeatherMap
     weather_data = fetch_from_openweather
-    
+
     # If OpenWeather fails, try Apple Weather as fallback
     if !weather_data[:success]
       Rails.logger.warn "OpenWeather failed, falling back to Apple Weather"
@@ -70,56 +70,56 @@ class WeatherAggregatorService
 
   def fetch_from_openweather
     Rails.logger.info "Fetching from OpenWeatherMap"
-    
+
     begin
       service = OpenWeatherService.new(@latitude, @longitude)
       result = service.fetch_weather_data
-      
+
       if result[:success]
         Rails.logger.info "Successfully fetched weather from OpenWeatherMap"
       else
         Rails.logger.warn "OpenWeatherMap returned error: #{result[:error]}"
       end
-      
+
       result
     rescue StandardError => e
       Rails.logger.error "OpenWeatherMap exception: #{e.message}"
-      { success: false, source: 'openweather', error: e.message }
+      { success: false, source: "openweather", error: e.message }
     end
   end
 
   def fetch_from_apple_weather
     Rails.logger.info "Fetching from Apple Weather"
-    
+
     begin
       service = AppleWeather.new(@latitude, @longitude)
       response = service.fetch_weather_data
-      
+
       if response.success?
         Rails.logger.info "Successfully fetched weather from Apple Weather"
         format_apple_weather_response(response.parsed_response)
       else
         Rails.logger.warn "Apple Weather returned error: #{response.code}"
-        { success: false, source: 'apple', error: "Apple Weather API error: #{response.code}" }
+        { success: false, source: "apple", error: "Apple Weather API error: #{response.code}" }
       end
     rescue StandardError => e
       Rails.logger.error "Apple Weather exception: #{e.message}"
-      { success: false, source: 'apple', error: e.message }
+      { success: false, source: "apple", error: e.message }
     end
   end
 
   def format_apple_weather_response(data)
     {
       success: true,
-      source: 'apple',
+      source: "apple",
       data: {
-        current_weather: format_apple_current_weather(data['currentWeather']),
-        forecast_daily: format_apple_daily_forecast(data['forecastDaily']),
+        current_weather: format_apple_current_weather(data["currentWeather"]),
+        forecast_daily: format_apple_daily_forecast(data["forecastDaily"]),
         metadata: {
           latitude: @latitude,
           longitude: @longitude,
-          timezone: data.dig('currentWeather', 'metadata', 'timezone'),
-          units: 'imperial'
+          timezone: data.dig("currentWeather", "metadata", "timezone"),
+          units: "imperial"
         }
       }
     }
@@ -129,53 +129,48 @@ class WeatherAggregatorService
     return {} unless current
 
     {
-      temperature: celsius_to_fahrenheit(current['temperature']),
-      feels_like: celsius_to_fahrenheit(current['temperatureApparent']),
-      humidity: (current['humidity'] * 100).round,
-      pressure: current['pressure'],
-      visibility: meters_to_miles(current['visibility']),
-      wind_speed: kmh_to_mph(current['windSpeed']),
-      wind_direction: current['windDirection'],
-      condition: map_apple_condition(current['conditionCode']),
-      condition_description: current['conditionCode'],
-      icon: current['conditionCode'],
-      timestamp: current['asOf']
+      temperature: celsius_to_fahrenheit(current["temperature"]),
+      feels_like: celsius_to_fahrenheit(current["temperatureApparent"]),
+      humidity: (current["humidity"] * 100).round,
+      pressure: current["pressure"],
+      visibility: meters_to_miles(current["visibility"]),
+      wind_speed: kmh_to_mph(current["windSpeed"]),
+      wind_direction: current["windDirection"],
+      condition: map_apple_condition(current["conditionCode"]),
+      condition_description: current["conditionCode"],
+      icon: current["conditionCode"],
+      timestamp: current["asOf"]
     }
   end
 
   def format_apple_daily_forecast(forecast)
-    return [] unless forecast && forecast['days']
+    return [] unless forecast && forecast["days"]
 
-    forecast['days'].map do |day|
+    forecast["days"].map do |day|
       {
-        date: day['forecastStart'],
-        temperature_max: celsius_to_fahrenheit(day['temperatureMax']),
-        temperature_min: celsius_to_fahrenheit(day['temperatureMin']),
-        condition: map_apple_condition(day['conditionCode']),
-        condition_description: day['conditionCode'],
-        precipitation_probability: day['precipitationChance'],
-        humidity: (day.dig('daytimeForecast', 'humidity') || 0) * 100,
+        date: day["forecastStart"],
+        temperature_max: celsius_to_fahrenheit(day["temperatureMax"]),
+        temperature_min: celsius_to_fahrenheit(day["temperatureMin"]),
+        condition: map_apple_condition(day["conditionCode"]),
+        condition_description: day["conditionCode"],
+        precipitation_probability: day["precipitationChance"],
+        humidity: (day.dig("daytimeForecast", "humidity") || 0) * 100,
         # Extract twilight times from Apple Weather (using correct field names)
-        sunrise: day['sunrise'],
-        sunset: day['sunset'],
-        civil_twilight_start: day['sunriseCivil'],
-        civil_twilight_end: day['sunsetCivil'],
-        nautical_twilight_start: day['sunriseNautical'],
-        nautical_twilight_end: day['sunsetNautical'],
-        astronomical_twilight_start: day['sunriseAstronomical'],
-        astronomical_twilight_end: day['sunsetAstronomical']
+        sunrise: day["sunrise"],
+        sunset: day["sunset"],
+        civil_twilight_start: day["sunriseCivil"],
+        civil_twilight_end: day["sunsetCivil"],
+        nautical_twilight_start: day["sunriseNautical"],
+        nautical_twilight_end: day["sunsetNautical"],
+        astronomical_twilight_start: day["sunriseAstronomical"],
+        astronomical_twilight_end: day["sunsetAstronomical"]
       }
     end
   end
 
   def fetch_stale_cache
-    # Try to get any cached data, even if expired
-    # This requires direct cache access, which might not be available in all cache stores
-    Rails.logger.warn "Attempting to retrieve stale cache data"
-    
-    # For now, return nil as we can't reliably get expired cache
-    # In production, you might want to implement a secondary cache strategy
-    nil
+    Rails.logger.warn "Attempting to retrieve last successful weather response"
+    cache_service.fetch_stale
   end
 
   # Unit conversion helpers
@@ -197,18 +192,18 @@ class WeatherAggregatorService
   # Map Apple Weather condition codes to standard conditions
   def map_apple_condition(condition_code)
     case condition_code
-    when 'Clear', 'MostlyClear'
-      'Clear'
-    when 'PartlyCloudy', 'MostlyCloudy', 'Cloudy'
-      'Clouds'
-    when 'Drizzle', 'Rain', 'HeavyRain', 'IsolatedThunderstorms', 'ScatteredThunderstorms', 'StrongStorms'
-      'Rain'
-    when 'Flurries', 'Snow', 'HeavySnow', 'Blizzard'
-      'Snow'
-    when 'Haze', 'Smoky'
-      'Haze'
-    when 'Foggy'
-      'Fog'
+    when "Clear", "MostlyClear"
+      "Clear"
+    when "PartlyCloudy", "MostlyCloudy", "Cloudy"
+      "Clouds"
+    when "Drizzle", "Rain", "HeavyRain", "IsolatedThunderstorms", "ScatteredThunderstorms", "StrongStorms"
+      "Rain"
+    when "Flurries", "Snow", "HeavySnow", "Blizzard"
+      "Snow"
+    when "Haze", "Smoky"
+      "Haze"
+    when "Foggy"
+      "Fog"
     else
       condition_code
     end

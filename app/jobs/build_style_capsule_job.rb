@@ -4,7 +4,7 @@ class BuildStyleCapsuleJob < ApplicationJob
   queue_as :style_capsule
   
   # Limit concurrent builds to avoid overloading the system
-  limits_concurrency to: 3, per: :queue
+  limits_concurrency to: 3, key: ->(*) { "style_capsule" }
   
   def perform(persona_id:, persona_label: nil, era: nil, require_rights: 'public')
     # Generate idempotency key to avoid duplicate builds

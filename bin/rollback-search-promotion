@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd "$repo_root"
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: CONFIRM_DATABASE_RESTORE=<database> bin/rollback-search-promotion <backup-directory>" >&2
+  exit 64
+fi
+
+backup_dir="$(cd "$1" && pwd -P)"
+allowed_root="$repo_root/storage/search-backups/"
+if [[ "$backup_dir/" != "$allowed_root"* ]]; then
+  echo "backup must be under $allowed_root" >&2
+  exit 64
+fi
+
+environment="${RAILS_ENV:-development}"
+database_name="$(RAILS_ENV="$environment" bin/rails runner 'puts ActiveRecord::Base.connection_db_config.database')"
+if [[ "${CONFIRM_DATABASE_RESTORE:-}" != "$database_name" ]]; then
+  echo "refusing destructive restore: set CONFIRM_DATABASE_RESTORE=$database_name" >&2
+  exit 64
+fi
+
+if lsof -nP -iTCP:3555 -sTCP:LISTEN >/dev/null 2>&1; then
+  echo "stop app.oknotok.ok-offline-api before restoring the database" >&2
+  exit 69
+fi
+
+test -f "$backup_dir/database.dump"
+test -f "$backup_dir/sanitized-snapshot.tar.gz"
+test -f "$backup_dir/checksums.sha256"
+(
+  cd "$backup_dir"
+  shasum -a 256 -c checksums.sha256
+)
+
+pg_restore --clean --if-exists --no-owner --exit-on-error --dbname="$database_name" "$backup_dir/database.dump"
+
+expected_total="$(tar -xOf "$backup_dir/sanitized-snapshot.tar.gz" --wildcards '*/metadata.json' | ruby -rjson -e 'metadata=JSON.parse(STDIN.read); puts metadata.fetch("publishedCounts").values.sum')"
+actual_total="$(RAILS_ENV="$environment" bin/rails runner 'year=ARGV.fetch(0).to_i; puts SearchableItem.where(year: year, item_type: %w[camp art event]).count' "$(basename "$(dirname "$backup_dir")")")"
+test "$actual_total" = "$expected_total"
+
+echo "restored_database=$database_name"
+echo "verified_search_records=$actual_total"
+echo "restart app.oknotok.ok-offline-api before public verification"
